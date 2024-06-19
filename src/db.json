@@ -1,0 +1,185 @@
+{
+  "header": {
+    "title": "Fitness with also a heath life",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    "image": "src/assets/workout.jpg"
+  },
+  "statistics": [
+    {
+      "title": "Workout",
+      "value": "4 hrs",
+      "bgColor": "bg-blue-500"
+    },
+    {
+      "title": "Calories",
+      "value": "1600 kcal",
+      "bgColor": "bg-orange-500"
+    },
+    {
+      "title": "Steps",
+      "value": "2200 steps",
+      "bgColor": "bg-purple-500"
+    }
+  ],
+  "goalProgress": {
+    "title": "Goal Progress",
+    "timeframe": "Weekly",
+    "chartData": [
+      {
+        "day": "Mon",
+        "workout": 80,
+        "calories": 60,
+        "steps": 40
+      },
+      {
+        "day": "Tue",
+        "workout": 70,
+        "calories": 80,
+        "steps": 60
+      },
+      {
+        "day": "Wed",
+        "workout": 90,
+        "calories": 50,
+        "steps": 70
+      },
+      {
+        "day": "Thu",
+        "workout": 100,
+        "calories": 70,
+        "steps": 80
+      },
+      {
+        "day": "Fri",
+        "workout": 60,
+        "calories": 90,
+        "steps": 50
+      },
+      {
+        "day": "Sat",
+        "workout": 50,
+        "calories": 100,
+        "steps": 90
+      },
+      {
+        "day": "Sun",
+        "workout": 40,
+        "calories": 80,
+        "steps": 60
+      }
+    ]
+  },
+  "schedule": {
+    "title": "My Schedule",
+    "events": [
+      {
+        "day": "Monday",
+        "activity": "Stretch",
+        "time": "08:00 AM",
+        "color": "bg-yellow-500"
+      },
+      {
+        "day": "Tuesday",
+        "activity": "Back Stretch",
+        "time": "08:00 AM",
+        "color": "bg-yellow-500"
+      },
+      {
+        "day": "Wednesday",
+        "activity": "Yoga",
+        "time": "08:00 AM",
+        "color": "bg-yellow-500"
+      }
+    ]
+  },
+  "weekPlan": {
+    "title": "Week Plan",
+    "meals": [
+      {
+        "day": "Monday",
+        "menu": "Pizza | Break Fast",
+        "time": "08:00 AM",
+        "color": "bg-orange-500"
+      },
+      {
+        "day": "Tuesday",
+        "menu": "Chicken | Lunch",
+        "time": "01:00 PM",
+        "color": "bg-orange-500"
+      },
+      {
+        "day": "Wednesday",
+        "menu": "Ice Cream | Dinner",
+        "time": "06:00 PM",
+        "color": "bg-orange-500"
+      },
+      {
+        "day": "Thursday",
+        "menu": "Burger | Lunch",
+        "time": "08:00 AM",
+        "color": "bg-orange-500"
+      },
+      {
+        "day": "Friday",
+        "menu": "Fries | Dinner",
+        "time": "11:00 PM",
+        "color": "bg-orange-500"
+      },
+      {
+        "day": "Saturday",
+        "menu": "Burrito | Brunch",
+        "time": "11:00 PM",
+        "color": "bg-orange-500"
+      },
+      {
+        "day": "Sunday",
+        "menu": "Egg & Bacon | Break Fast",
+        "time": "08:00 AM",
+        "color": "bg-orange-500"
+      }
+    ]
+  },
+  "posts": [
+    {
+      "author": {
+        "name": "Aizhan Maratovna",
+        "avatar": "/path/to/avatar.jpg",
+        "date": "2 days ago"
+      },
+      "content": "I want to study Svelte JS Framework. What is the best resource should I use?",
+      "tags": ["svelte", "javascript", "recommendations"],
+      "stats": {
+        "views": 125,
+        "likes": 155
+      }
+    },
+    {
+      "author": {
+        "name": "Aizhan Maratovna",
+        "avatar": "/path/to/avatar.jpg",
+        "date": "2 days ago"
+      },
+      "content": "I want to study Svelte JS Framework. What is the best resource should I use?",
+      "tags": ["svelte", "javascript", "recommendations"],
+      "stats": {
+        "views": 125,
+        "likes": 155
+      }
+    },
+    {
+      "author": {
+        "name": "Aizhan Maratovna",
+        "avatar": "/path/to/avatar.jpg",
+        "date": "2 days ago"
+      },
+      "content": "I want to study Svelte JS Framework. What is the best resource should I use?",
+      "tags": ["svelte", "javascript", "recommendations"],
+      "stats": {
+        "views": 125,
+        "likes": 155
+      }
+    }
+   
+  ]
+
+}
