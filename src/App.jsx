@@ -13,6 +13,11 @@ import VideoListPage from './pages/VideoListPage';
 import NutritionPage from './pages/NutritionPage';
 import UserDetailPage from './pages/UserDetailPage';
 import NotFoundPage from './pages/NotFoundPage';
+import BlogListPage from './pages/BlogListPage';
+import BlogDetailsPage from './pages/BlogDetailsPage';
+import AddEditBlogPage from './pages/AddEditBlogPage';
+import UserDetailsForm from './pages/UserDetailsForm';
+
 
 
 
@@ -20,6 +25,7 @@ import NotFoundPage from './pages/NotFoundPage';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
+      
       <Route path='SignUp' element={<SignUp />} />
       <Route path='Login' element={<Login />} />
       <Route path='OTP' element={<Otp />} />
@@ -30,6 +36,12 @@ const router = createBrowserRouter(
       <Route path='/' element={<MainLayout />}>
         <Route index element={<HomePage />} />
         <Route path='*' element={<NotFoundPage />} />
+        <Route path="/blogs" element={<BlogListPage />} />
+        <Route path="/blog/:id" element={<BlogDetailsPage />} />
+        <Route path="/add-blog" element={<AddEditBlogPage />} />
+        <Route path="/edit-blog/:id" element={<AddEditBlogPage />} />
+        <Route path='/UserDetailsForm' element={<UserDetailsForm />} />
+
         {/*<Route 
           path='Workout' 
           element={

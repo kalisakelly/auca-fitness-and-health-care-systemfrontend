@@ -3,42 +3,40 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
 const BlogDetail = () => {
-  const { id } = useParams(); // Retrieve the id parameter from the URL
-  const [blog, setBlog] = useState(null); // State to hold the blog details
-  const [comments, setComments] = useState([]); // State to hold comments
-  const [newComment, setNewComment] = useState(''); // State to hold the new comment
+  const { id } = useParams();
+  const [blog, setBlog] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchBlog = async () => {
+    const fetchBlogData = async () => {
+      setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:3001/blog/${id}`); // Fetch blog details based on id
-        setBlog(response.data); // Set the fetched blog data to state
-      } catch (error) {
-        console.error('Error fetching blog:', error);
+        const blogResponse = await axios.get(`http://localhost:3001/blog/${id}`);
+        setBlog(blogResponse.data);
+        setComments(blogResponse.data.comments || []);
+        // Increment views count
+        await axios.patch(`http://localhost:3001/blog/${id}/view`);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
       }
     };
 
-    const fetchComments = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3001/blog/${id}/comments`); // Fetch comments based on blog id
-        setComments(response.data); // Set the fetched comments data to state
-      } catch (error) {
-        console.error('Error fetching comments:', error);
-      }
-    };
-
-    fetchBlog();
-    fetchComments();
-  }, [id]); // Fetch blog details whenever id changes
+    fetchBlogData();
+  }, [id]);
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:3001/blog/${id}/comments`, { body: newComment });
-      setComments([...comments, response.data]); // Update comments state with the new comment
-      setNewComment(''); // Clear the comment input field
-    } catch (error) {
-      console.error('Error posting comment:', error);
+      const response = await axios.post(`http://localhost:3001/blog/${id}/comment`, { text: newComment });
+      setComments([...comments, response.data]);
+      setNewComment('');
+    } catch (err) {
+      console.error('Error posting comment:', err);
     }
   };
 
@@ -46,12 +44,12 @@ const BlogDetail = () => {
     try {
       await axios.patch(`http://localhost:3001/blog/${id}/like`);
       setBlog({ ...blog, likes: blog.likes + 1 });
-    } catch (error) {
-      console.error('Error liking blog:', error);
+    } catch (err) {
+      console.error('Error liking blog:', err);
     }
   };
 
-  if (!blog) {
+  if (loading) {
     return (
       <div className="container mx-auto py-6">
         <p>Loading...</p>
@@ -59,17 +57,40 @@ const BlogDetail = () => {
     );
   }
 
+  if (error) {
+    return (
+      <div className="container mx-auto py-6">
+        <p>Error loading blog: {error.message}</p>
+      </div>
+    );
+  }
+
+  if (!blog) {
+    return (
+      <div className="container mx-auto py-6">
+        <p>No blog found.</p>
+      </div>
+    );
+  }
+
+  const renderAvatar = (username) => {
+    const initials = username
+      ? username[0].toUpperCase()
+      : String.fromCharCode(65 + Math.floor(Math.random() * 26)) + String.fromCharCode(65 + Math.floor(Math.random() * 26));
+    return (
+      <div className="w-12 h-12 rounded-full bg-blue-500 text-white flex items-center justify-center">
+        {initials}
+      </div>
+    );
+  };
+
   return (
     <div className="container mx-auto py-6">
       <div className="bg-white rounded-lg shadow p-6 mb-6">
         <div className="flex items-center mb-4">
-          <img
-            className="w-12 h-12 rounded-full mr-4"
-            src={blog.author.avatar}
-            alt={blog.author.name}
-          />
-          <div>
-            <h2 className="text-lg font-bold">{blog.author.name}</h2>
+          {renderAvatar(blog.createdby?.name)}
+          <div className="ml-4">
+            <h2 className="text-lg font-bold">{blog.createdby?.name}</h2>
             <p className="text-gray-600">{new Date(blog.createdat).toLocaleDateString()}</p>
           </div>
         </div>
@@ -77,8 +98,8 @@ const BlogDetail = () => {
         <p className="mb-4">{blog.body}</p>
         <div className="flex justify-between items-center mb-4">
           <div className="flex">
-            {blog.tags && blog.tags.map((tag, index) => (
-              <span key={index} className="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold mr-2 text-gray-700">{tag}</span>
+            {blog.tags && blog.tags.map((tag) => (
+              <span key={tag} className="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold mr-2 text-gray-700">{tag}</span>
             ))}
           </div>
           <div className="flex space-x-4">
@@ -90,13 +111,13 @@ const BlogDetail = () => {
           Like
         </button>
       </div>
-      
+
       <div className="bg-white rounded-lg shadow p-6 mb-6">
         <h3 className="text-lg font-bold mb-4">Comments</h3>
         {comments.length > 0 ? (
           comments.map((comment, index) => (
             <div key={index} className="mb-4">
-              <p>{comment.body}</p>
+              <p>{comment.text}</p>
             </div>
           ))
         ) : (
