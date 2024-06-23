@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Achievements from '../components/Achievements';
 import axios from 'axios';
 
 const Workout = () => {
@@ -41,29 +42,8 @@ const Workout = () => {
       </header>
 
       <section className="bg-white p-8">
-        <h2 className="text-2xl font-bold mb-4">Achievements</h2>
-        <div className="grid grid-cols-5 gap-4">
-          <div className="bg-blue-200 p-4 rounded text-center">
-            <p className="text-xl font-bold">15</p>
-            <p>hours</p>
-          </div>
-          <div className="bg-blue-200 p-4 rounded text-center">
-            <p className="text-xl font-bold">550</p>
-            <p>Kcal</p>
-          </div>
-          <div className="bg-blue-200 p-4 rounded text-center">
-            <p className="text-xl font-bold">15</p>
-            <p>Poses</p>
-          </div>
-          <div className="bg-blue-200 p-4 rounded text-center">
-            <p className="text-xl font-bold">5</p>
-            <p>Sets</p>
-          </div>
-          <div className="bg-blue-200 p-4 rounded text-center">
-            <p className="text-xl font-bold">5</p>
-            <p>Sets</p>
-          </div>
-        </div>
+      <Achievements />
+
       </section>
 
       <section className="bg-gray-50 p-8">

@@ -11,6 +11,8 @@ const DietPlan = () => {
   const [sort, setSort] = useState('desc');
   const navigate = useNavigate();
 
+  const userRole = localStorage.getItem('userRole');
+
   useEffect(() => {
     fetchNutritionList();
   }, [page, searchQuery, sort]);
@@ -94,9 +96,9 @@ const DietPlan = () => {
                   {nutritionList.map((nutrition) => (
                     <tr key={nutrition.id}>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {nutrition.image && (
+                      {nutrition.image && (
                           <img
-                            src={`http://localhost:3001/uploads/${nutrition.image}`}
+                            src={nutrition.image}
                             alt={nutrition.name}
                             className="h-10 w-10 rounded-full"
                           />
@@ -143,12 +145,14 @@ const DietPlan = () => {
                 Next
               </button>
             </div>
-            <button
-              onClick={() => navigate('/nutrition/add')}
-              className="mt-4 px-4 py-2 bg-green-500 text-white rounded-md"
-            >
-              Add New Nutrient
-            </button>
+            {(userRole === 'admin' || userRole === 'nutritionist') && (
+              <button
+                onClick={() => navigate('/nutrition/add')}
+                className="mt-4 px-4 py-2 bg-green-500 text-white rounded-md"
+              >
+                Add New Nutrient
+              </button>
+            )}
           </div>
         </div>
       </div>

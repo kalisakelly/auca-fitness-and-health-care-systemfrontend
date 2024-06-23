@@ -10,7 +10,6 @@ import PostPage from './Post';
 import Adminpage from './AdminPage';
 import Exercise from './Exercise';
 import BlogDetail from './BlogDetail';
-import BlogPage from './BlogPage';
 
 export {
     Login,
@@ -25,6 +24,6 @@ export {
     Adminpage,
     Exercise,
     BlogDetail,
-    BlogPage
+    
 
 };

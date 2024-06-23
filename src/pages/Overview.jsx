@@ -7,27 +7,46 @@ import Spinner from '../components/Spinner';
 import HeaderBlock from '../components/Headerblock';
 import workoutImage from '../assets/workout.jpg';
 import StatisticCard from '../components/StatisticCard';
+import { Button } from 'flowbite-react';
+import {jwtDecode} from "jwt-decode";
 
 const Overview = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [hasSchedule, setHasSchedule] = useState(false);
     const navigate = useNavigate();
-
+    
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const [ statisticsRes, goalProgressRes, scheduleRes, weekPlanRes, postsRes] = await Promise.all([
+                const token = localStorage.getItem('token');
+                let userId;
+                if (token) {
+                    const decodedToken = jwtDecode(token);
+                    userId = decodedToken.id;
+                    setIsAuthenticated(true);
+                }
+
+                const [statisticsRes, goalProgressRes, scheduleRes, weekPlanRes, postsRes, myScheduleRes] = await Promise.all([
                     fetch('http://localhost:5000/statistics'),
                     fetch('http://localhost:5000/goalProgress'),
                     fetch('http://localhost:5000/schedule'),
                     fetch('http://localhost:5000/weekPlan'),
                     axios.get('http://localhost:3001/blog', {
                         params: {
-                            limit: 2, // Fetch only the last 4 posts
+                            limit: 2,
                             sort: 'desc',
                         },
-                    })
+                    }),
+                    isAuthenticated
+                        ? axios.get(`http://localhost:3001/schedules/user/${userId}`, {
+                            headers: {
+                                Authorization: `Bearer ${token}`
+                            }
+                        })
+                        : Promise.resolve({ data: [] })
                 ]);
 
                 const statistics = await statisticsRes.json();
@@ -35,8 +54,10 @@ const Overview = () => {
                 const schedule = await scheduleRes.json();
                 const weekPlan = await weekPlanRes.json();
                 const posts = postsRes.data.blogs || [];
+                const mySchedules = isAuthenticated ? myScheduleRes.data : [];
 
-                setData({ statistics, goalProgress, schedule, weekPlan, posts });
+                setData({ statistics, goalProgress, schedule, weekPlan, posts, mySchedules });
+                setHasSchedule(mySchedules.length > 0);
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -45,7 +66,7 @@ const Overview = () => {
         }
 
         fetchData();
-    }, []);
+    }, [isAuthenticated]);
 
     const renderAvatar = (username) => {
         const initials = username
@@ -145,25 +166,28 @@ const Overview = () => {
                     {/* Right Column */}
                     <div className="lg:col-span-1">
                         {/* My Schedule */}
-                        <div className="bg-white rounded-lg shadow p-6 mb-6">
-                            <div className="flex justify-between items-center mb-4">
-                                <h2 className="text-xl font-bold">{data.schedule.title}</h2>
-                                <a href="/schedule" className="text-orange-500 hover:text-orange-700">
-                                    View All &gt;
-                                </a>
+                        {isAuthenticated && !hasSchedule && (
+                            <div className="bg-white rounded-lg shadow p-6 mb-6">
+                                <div className="flex justify-between items-center mb-4">
+                                    <h2 className="text-xl font-bold">Weekly schedule</h2>
+                                    <a href="/MySchedule" className="text-orange-500 hover:text-orange-700">
+                                        <Button>Add New</Button>
+                                    </a>
+                                </div>
+                                <ul>
+                                    {data.mySchedules.map((event, index) => (
+                                        <li key={index} className="flex justify-between items-center mb-4">
+                                            <div>
+                                                <h3 className="font-bold">{event.day}</h3>
+                                                <p>{event.activity}</p>
+                                                <p>{event.description}</p> {/* Add description here */}
+                                            </div>
+                                            <span className="bg-yellow-500 text-white rounded-full px-4 py-2">{event.time}</span>
+                                        </li>
+                                    ))}
+                                </ul>
                             </div>
-                            <ul>
-                                {data.schedule.events.map((event, index) => (
-                                    <li key={index} className="flex justify-between items-center mb-4">
-                                        <div>
-                                            <h3 className="font-bold">{event.day}</h3>
-                                            <p>{event.activity}</p>
-                                        </div>
-                                        <span className="bg-yellow-500 text-white rounded-full px-4 py-2">{event.time}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
+                        )}
 
                         {/* Week Plan */}
                         <div className="bg-white rounded-lg shadow p-6">
