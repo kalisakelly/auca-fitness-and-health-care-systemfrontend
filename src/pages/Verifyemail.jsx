@@ -48,11 +48,11 @@ const Otp = () => {
   }
 
   return (
-    <div className="flex h-screen">
-      <div className="w-1/2 bg-blue-500 flex flex-col justify-center items-center text-white p-8">
+    <div className="flex h-screen  bg-blue-500">
+      <div className="w-1/2 flex flex-col justify-center items-center text-white p-8">
         <h1 className="text-4xl font-bold mb-4">OTP VERIFICATION</h1>
         <p className="text-lg mb-8">Verify With OTP</p>
-        <p className="mb-4">Enter the OTP sent to +250-82******00</p>
+        <p className="mb-4">Enter the OTP received on your email</p>
         <div className="flex space-x-4 mb-8">
           {otp.map((digit, index) => (
             <input
@@ -72,22 +72,9 @@ const Otp = () => {
         <button onClick={handleSubmit} className="bg-black text-white px-6 py-3 rounded-lg mb-4">Verify with OTP</button>
         <p className="text-red-500">Resend OTP in: <span className="text-red-700">00:30</span></p>
       </div>
-      <div className="w-1/2 flex justify-center items-center bg-blue-500">
-        <div className="bg-white p-8 rounded-lg shadow-lg">
-          <h2 className="text-2xl font-bold mb-4">Reset Your Password</h2>
-          <form>
-            <div className="mb-4">
-              <label className="block text-gray-700">Password</label>
-              <input type="password" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700">Confirm Password</label>
-              <input type="password" className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            </div>
-            <button type="submit" className="bg-red-500 text-white px-6 py-2 rounded-lg">Change</button>
-          </form>
-        </div>
-      </div>
+      <div className="w-1/2 flex  md:flex bg-cover" style={{ backgroundImage: 'url(src/assets/password2.png)' }}>
+
+    </div>
     </div>
   );
 };

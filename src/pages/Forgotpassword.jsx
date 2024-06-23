@@ -30,7 +30,7 @@ const RequestPasswordReset = () => {
   };
 
   return (
-    <div className="flex h-screen items-center justify-center bg-gray-200">
+    <div className="flex h-screen items-center justify-center bg-blue-500 p-5">
       <div className="bg-white p-8 rounded-lg shadow-lg w-96">
         <h2 className="text-2xl font-bold mb-4">Request Password Reset</h2>
         <form onSubmit={handleSubmit}>

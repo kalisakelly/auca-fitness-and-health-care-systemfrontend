@@ -32,11 +32,11 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
       
-      <Route path='SignUp' element={<SignUp />} />
-      <Route path='Login' element={<Login />} />
-      <Route path='OTP' element={<Otp />} />
-      <Route path= "Forgot-password" element={<RequestPasswordReset/>} />
-      <Route path='Reset-password' element={<ResetPassword/>}/>
+      <Route path='/SignUp' element={<SignUp />} />
+      <Route path='/Login' element={<Login />} />
+      <Route path='/OTP' element={<Otp />} />
+      <Route path= "/Forgot-password" element={<RequestPasswordReset/>} />
+      <Route path='/Reset-password' element={<ResetPassword/>}/>
       <Route path="/blog/:id" element={<BlogDetail />} />
       <Route path='/' element={<MainLayout />}>
         <Route index element={<HomePage />} />

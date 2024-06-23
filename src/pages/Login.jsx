@@ -31,11 +31,7 @@ const SignIn = () => {
           setShowSuccessModal(true);
           const timeoutId = setTimeout(() => {
             setShowSuccessModal(false);
-            if (role === 'admin' || role === 'nutritionist') {
-              navigate('/');
-            } else {
-              setErrorMessage('Unauthorized role');
-            }
+            navigate("/")
             setHideModalTimeout(timeoutId);
           }, 2000);
         } else {
@@ -65,8 +61,8 @@ const SignIn = () => {
     };
   }, [hideModalTimeout]);
 
-  const navigateBack = () => {
-    navigate('/home');
+  const Handleforgotpassword = () => {
+    navigate('/Forgot-password');
   };
 
   const handleUserRegistration = () => {
@@ -74,8 +70,7 @@ const SignIn = () => {
   };
 
   return (
-    <div className="flex items-stretch md:flex-row min-h-screen bg-blue-500 p-5">
-      <div className="self-start justify-center items-center"></div>
+    <div className=" flex items-stretch md:flex-row min-h-screen bg-blue-500 p-5">
       <form className="basis-1/2 self-center md:p-12 justify-center items-center gap-20" onSubmit={handleSubmit}>
         {showSuccessModal && (
           <div className="fixed inset-0 flex items-center justify-center z-50">
@@ -89,9 +84,12 @@ const SignIn = () => {
             <button type="button" className="ml-4" onClick={() => setErrorMessage('')}>×</button>
           </div>
         )}
-        <div className="mt-20 grid grid-cols-2">
+
+        <div className="mt-30 grid grid-cols-2">
+
           <div className="">
-            <label htmlFor="email" className="text-black-700">Email</label>
+
+            <label htmlFor="email" className="block text-black-700">Email</label>
             <input
               type="email"
               id="email"
@@ -120,6 +118,7 @@ const SignIn = () => {
           <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">Login</button>
           <button type="button" className="bg-gray-500 text-white px-4 py-2 rounded" onClick={handleUserRegistration}>Register</button>
         </div>
+       <button type='link' className="mt-10 text-white " onClick={Handleforgotpassword}>Forgot password</button>
       </form>
       <div className="basis-1/2 hidden md:flex justify-center items-center bg-cover" style={{ backgroundImage: 'url(src/assets/Running.png)' }}></div>
     </div>

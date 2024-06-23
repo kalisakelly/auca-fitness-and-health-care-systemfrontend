@@ -1,38 +1,50 @@
-import { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Achievements from '../components/Achievements';
 import axios from 'axios';
 
 const Workout = () => {
   const [videos, setVideos] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredVideos, setFilteredVideos] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const [limit] = useState(6); // Number of items per page
+  const [sort] = useState('desc'); // Sorting order
 
   useEffect(() => {
-    const fetchVideos = async () => {
-      try {
-        const response = await axios.get("http://localhost:3001/videos");
-        setVideos(response.data);
-        setFilteredVideos(response.data);
-      } catch (e) {
-        console.error("Error getting videos", e);
-      }
-    };
-
     fetchVideos();
-  }, []);
+  }, [currentPage, searchTerm]);
 
-  useEffect(() => {
-    const results = videos.filter(video =>
-      video.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      video.category.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredVideos(results);
-  }, [searchTerm, videos]);
+  const fetchVideos = async () => {
+    try {
+      const response = await axios.get('http://localhost:3001/videos', {
+        params: {
+          page: currentPage,
+          search: searchTerm,
+          limit,
+          sort,
+        },
+      });
+      setVideos(response.data.data);
+      setTotalItems(response.data.count);
+    } catch (e) {
+      console.error("Error getting videos", e);
+    }
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
 
   const truncateDescription = (description, wordLimit) => {
     const words = description.split(' ');
     return words.length > wordLimit ? words.slice(0, wordLimit).join(' ') + '...' : description;
   };
+
+  const totalPages = Math.ceil(totalItems / limit);
 
   return (
     <div className="flex flex-col">
@@ -42,8 +54,7 @@ const Workout = () => {
       </header>
 
       <section className="bg-white p-8">
-      <Achievements />
-
+        <Achievements />
       </section>
 
       <section className="bg-gray-50 p-8">
@@ -53,23 +64,40 @@ const Workout = () => {
           placeholder="Search by name or category"
           className="mb-4 p-2 border border-gray-300 rounded"
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={handleSearchChange}
         />
         <div className="grid grid-cols-3 gap-4">
-          {filteredVideos.length > 0 ? (
-            filteredVideos.map((video, index) => (
+          {videos.length > 0 ? (
+            videos.map((video, index) => (
               <div key={index} className="bg-white rounded overflow-hidden shadow-lg">
                 <div className="video-container" dangerouslySetInnerHTML={{ __html: video.url }} />
                 <div className="p-4">
                   <h3 className="text-lg font-bold">{video.name}</h3>
                   <p className="text-gray-500">{truncateDescription(video.description, 50)}</p>
-                  <p className="text-gray-500">{video.createdate}</p>
+                  <p className="text-gray-500">{video.createdDate}</p>
                 </div>
               </div>
             ))
           ) : (
             <p>No videos available</p>
           )}
+        </div>
+        <div className="mt-4 flex justify-between items-center">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md disabled:opacity-50"
+          >
+            Previous
+          </button>
+          <span>Page {currentPage} of {totalPages}</span>
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md disabled:opacity-50"
+          >
+            Next
+          </button>
         </div>
       </section>
 

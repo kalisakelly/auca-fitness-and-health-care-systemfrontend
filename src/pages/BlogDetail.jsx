@@ -6,6 +6,7 @@ const BlogDetail = () => {
   const { id } = useParams();
   const [blog, setBlog] = useState(null);
   const [comments, setComments] = useState([]);
+  const [replies, setReplies] = useState({});
   const [newComment, setNewComment] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -29,10 +30,43 @@ const BlogDetail = () => {
     fetchBlogData();
   }, [id]);
 
+  useEffect(() => {
+    const fetchReplies = async () => {
+      try {
+        const responses = await Promise.all(
+          comments.map(comment =>
+            axios.get(`http://localhost:3001/postreplies/blog/${comment.blogid}`)
+          )
+        );
+        const repliesData = responses.reduce((acc, response, index) => {
+          acc[comments[index].id] = response.data;
+          return acc;
+        }, {});
+        setReplies(repliesData);
+      } catch (err) {
+        console.error('Error fetching replies:', err);
+      }
+    };
+
+    if (comments.length > 0) {
+      fetchReplies();
+    }
+  }, [comments]);
+
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('You must be logged in to comment.');
+      return;
+    }
+
     try {
-      const response = await axios.post(`http://localhost:3001/blog/${id}/comment`, { text: newComment });
+      const response = await axios.post(`http://localhost:3001/blog/${id}/comment`, { text: newComment }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setComments([...comments, response.data]);
       setNewComment('');
     } catch (err) {
@@ -41,8 +75,18 @@ const BlogDetail = () => {
   };
 
   const handleLike = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('You must be logged in to like the blog.');
+      return;
+    }
+
     try {
-      await axios.patch(`http://localhost:3001/blog/${id}/like`);
+      await axios.patch(`http://localhost:3001/blog/${id}/like`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setBlog({ ...blog, likes: blog.likes + 1 });
     } catch (err) {
       console.error('Error liking blog:', err);
@@ -118,6 +162,15 @@ const BlogDetail = () => {
           comments.map((comment, index) => (
             <div key={index} className="mb-4">
               <p>{comment.text}</p>
+              {replies[comment.id] && replies[comment.id].length > 0 && (
+                <div className="ml-6 mt-2">
+                  {replies[comment.id].map((reply, replyIndex) => (
+                    <div key={replyIndex} className="mb-2">
+                      <p>{reply.text}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           ))
         ) : (

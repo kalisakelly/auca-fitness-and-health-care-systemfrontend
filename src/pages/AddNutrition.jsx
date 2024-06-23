@@ -10,6 +10,7 @@ const AddNutrition = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
+    const token = localStorage.getItem('token');
     e.preventDefault();
     const formData = new FormData();
     formData.append('name', name);
@@ -20,6 +21,7 @@ const AddNutrition = () => {
     try {
       await axios.post('http://localhost:3001/nutrition', formData, {
         headers: {
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
         },
       });
