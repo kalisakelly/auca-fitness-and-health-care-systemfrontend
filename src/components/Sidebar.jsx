@@ -1,5 +1,44 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { DumbbellIcon, HomeIcon, SaladIcon, BugIcon, CalendarIcon, BarChartIcon, UsersIcon, LogOutIcon,FilePenIcon } from '../assets/icons';
+import { 
+  DumbbellIcon, 
+  HomeIcon, 
+  SaladIcon, 
+  BugIcon, 
+  CalendarIcon, 
+  BarChartIcon, 
+  UsersIcon, 
+  LogOutIcon, 
+  FilePenIcon 
+} from '../assets/icons';
+
+const userLinks = [
+  { to: "/", icon: HomeIcon, label: "Overview" },
+  { to: "/DietPlan", icon: SaladIcon, label: "Diet Plan" },
+  { to: "/Blogs", icon: BugIcon, label: "Blogs" },
+  { to: "/Workout", icon: DumbbellIcon, label: "Videos" },
+  { to: "/MySchedule", icon: CalendarIcon, label: "Schedule" },
+  { to: "/Biometrics", icon: BarChartIcon, label: "Biometrics" }
+];
+
+const nutritionistLinks = [
+  { to: "/", icon: HomeIcon, label: "Overview" },
+  { to: "/DietPlan", icon: SaladIcon, label: "Diet Plan" },
+  { to: "/Blogs", icon: BugIcon, label: "Blogs" },
+  { to: "/Workout", icon: DumbbellIcon, label: "Videos" },
+  { to: "/MySchedule", icon: CalendarIcon, label: "Schedule" },
+  { to: "/Biometrics", icon: BarChartIcon, label: "Biometrics" },
+  { to: "/UserDetail", icon: FilePenIcon, label: "User Details" }
+];
+
+const adminLinks = [
+  { to: "/", icon: HomeIcon, label: "Overview" },
+  { to: "/DietPlan", icon: SaladIcon, label: "Diet Plan" },
+  { to: "/Blogs", icon: BugIcon, label: "Blogs" },
+  { to: "/Workout", icon: DumbbellIcon, label: "Videos" },
+  { to: "/MySchedule", icon: CalendarIcon, label: "Schedule" },
+  { to: "/Biometrics", icon: BarChartIcon, label: "Biometrics" },
+  { to: "/Adminpage", icon: UsersIcon, label: "Admin Page" }
+];
 
 const Sidebar = () => {
   const userRole = localStorage.getItem('userRole');
@@ -11,6 +50,14 @@ const Sidebar = () => {
     localStorage.removeItem('userRole');
     navigate('/Login');
   };
+
+  const getLinks = () => {
+    if (userRole === 'admin') return adminLinks;
+    if (userRole === 'nutritionist') return nutritionistLinks;
+    return userLinks;
+  };
+
+  const links = getLinks();
 
   return (
     <div className="flex h-full min-h-screen flex-col border-r bg-gray-100 dark:border-gray-800 dark:bg-gray-900">
@@ -25,72 +72,16 @@ const Sidebar = () => {
       </div>
       <nav className="flex-1 overflow-auto py-4">
         <div className="grid gap-2 px-4">
-          <Link
-            to="/"
-            className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-500 transition-colors hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50"
-          >
-            <HomeIcon className="h-5 w-5" />
-            <span className="hidden sm:inline">Overview</span>
-          </Link>
-          {/* {isAuthenticated && (
-            <>
-              <Link
-                to="/Workout"
-                className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-500 transition-colors hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50"
-              >
-                <DumbbellIcon className="h-5 w-5" />
-                <span className="hidden sm:inline">Workout</span>
-              </Link>
-            </>
-          )} */}
-          <Link
-            to="/DietPlan"
-            className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-500 transition-colors hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50"
-          >
-            <SaladIcon className="h-5 w-5" />
-            <span className="hidden sm:inline">Diet Plan</span>
-          </Link>
-          <Link
-            to="/Blogs"
-            className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-500 transition-colors hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50"
-          >
-            <BugIcon className="h-5 w-5" />
-            <span className="hidden sm:inline">Blogs</span>
-          </Link>
-          <Link
-            to="/Workout"
-            className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-500 transition-colors hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50"
-          >
-            <DumbbellIcon className="h-5 w-5" />
-            <span className="hidden sm:inline">Videos</span>
-          </Link>
-          {isAuthenticated && (
-            <>
-              <Link
-                to="/MySchedule"
-                className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-500 transition-colors hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50"
-              >
-                <CalendarIcon className="h-5 w-5" />
-                <span className="hidden sm:inline">Schedule</span>
-              </Link>
-              <Link
-                to="/Biometrics"
-                className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-500 transition-colors hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50"
-              >
-                <BarChartIcon className="h-5 w-5" />
-                <span className="hidden sm:inline">Biometrics</span>
-              </Link>
-              {userRole === 'admin' && (
-                <Link
-                  to="/Adminpage"
-                  className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-500 transition-colors hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50"
-                >
-                  <UsersIcon className="h-5 w-5" />
-                  <span className="hidden sm:inline">Admin Page</span>
-                </Link>
-              )}
-            </>
-          )}
+          {links.map((link) => (
+            <Link
+              key={link.to}
+              to={link.to}
+              className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-500 transition-colors hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-50"
+            >
+              <link.icon className="h-5 w-5" />
+              <span className="hidden sm:inline">{link.label}</span>
+            </Link>
+          ))}
         </div>
       </nav>
       {isAuthenticated && (

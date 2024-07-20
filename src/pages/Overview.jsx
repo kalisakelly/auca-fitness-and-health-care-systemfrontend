@@ -9,6 +9,10 @@ import workoutImage from '../assets/workout.jpg';
 import StatisticCard from '../components/StatisticCard';
 import { Button } from 'flowbite-react';
 import {jwtDecode} from 'jwt-decode';
+import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const Overview = () => {
     const [data, setData] = useState({
@@ -17,7 +21,9 @@ const Overview = () => {
         schedule: [],
         weekPlan: {},
         posts: [],
-        mySchedules: []
+        mySchedules: [],
+        userDetails: {},
+        recommendations: {}
     });
     const [loading, setLoading] = useState(true);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -36,7 +42,7 @@ const Overview = () => {
                     setIsAuthenticated(true);
                 }
 
-                const [postsRes, myScheduleRes] = await Promise.all([
+                const [postsRes, myScheduleRes, userDetailsRes, recommendationsRes] = await Promise.all([
                     axios.get('http://localhost:3001/blog', {
                         params: {
                             limit: 2,
@@ -49,16 +55,34 @@ const Overview = () => {
                                 Authorization: `Bearer ${token}`
                             }
                         })
-                        : Promise.resolve({ data: [] })
+                        : Promise.resolve({ data: [] }),
+                    isAuthenticated
+                        ? axios.get(`http://localhost:3001/userdetails/user/${userId}`, {
+                            headers: {
+                                Authorization: `Bearer ${token}`
+                            }
+                        })
+                        : Promise.resolve({ data: {} }),
+                    isAuthenticated
+                        ? axios.get(`http://localhost:3001/userdetails/${userId}/recommendations`, {
+                            headers: {
+                                Authorization: `Bearer ${token}`
+                            }
+                        })
+                        : Promise.resolve({ data: {} })
                 ]);
 
                 const posts = postsRes.data.blogs || [];
                 const mySchedules = isAuthenticated ? myScheduleRes.data : [];
+                const userDetails = isAuthenticated ? userDetailsRes.data : {};
+                const recommendations = isAuthenticated ? recommendationsRes.data : {};
 
                 setData(prevData => ({
                     ...prevData,
                     posts,
-                    mySchedules
+                    mySchedules,
+                    userDetails,
+                    recommendations
                 }));
                 setHasSchedule(mySchedules.length > 0);
                 setLoading(false);
@@ -80,6 +104,32 @@ const Overview = () => {
                 {initials}
             </div>
         );
+    };
+
+    const chartData = {
+        labels: data.statistics.map(stat => stat.title),
+        datasets: [
+            {
+                label: 'Value',
+                data: data.statistics.map(stat => stat.value),
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+            },
+        ],
+    };
+
+    const chartOptions = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: 'User Statistics',
+            },
+        },
     };
 
     if (loading) {
@@ -127,8 +177,8 @@ const Overview = () => {
                                 </div>
                             </div>
                             <div>
-                                {/* Replace with actual chart */}
-                                <div className="h-32 bg-gray-200 rounded-lg">Chart goes here</div>
+                                {/* Chart */}
+                                <Bar data={chartData} options={chartOptions} />
                             </div>
                         </div>
 
@@ -183,44 +233,50 @@ const Overview = () => {
                                             <li key={index} className="flex justify-between items-center mb-4">
                                                 <div>
                                                     <h3 className="font-bold">{event.date}</h3>
-                                                    <p>{event.activity}</p>
-                                                    <p>{event.Details}</p> {/* Add description here */}
+                                                    <p>{event.details}</p> {/* Assuming you have 'details' property in event */}
                                                 </div>
-                                                <span className="bg-yellow-500 text-white rounded-full px-4 py-2">{event.time}</span>
+                                                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                                    Start
+                                                </button>
                                             </li>
                                         ))}
                                     </ul>
                                 ) : (
-                                    <p>No schedule available.</p>
+                                    <p>No events found.</p>
                                 )}
                             </div>
                         )}
 
-                        {/* Week Plan */}
-                        <div className="bg-white rounded-lg shadow p-6">
-                            <div className="flex justify-between items-center">
-                                <h2 className="text-xl font-bold mb-4">{data.weekPlan.title}</h2>
-                                <a className="text-orange-500 hover:text-orange-700">
-                                    View All &gt;
-                                </a>
+                        {/* Recommendations */}
+                        {isAuthenticated && data.recommendations && (
+                            <div className="bg-white rounded-lg shadow p-6 mb-6">
+                                <h2 className="text-xl font-bold">Recommendations</h2>
+                                <p className="mb-4">
+                                    <strong>Nutrition:</strong> {data.recommendations.nutritionRecommendation}
+                                </p>
+                                <p>
+                                    <strong>Exercise:</strong> {data.recommendations.exerciseRecommendation}
+                                </p>
                             </div>
-                            {data.weekPlan.meals?.map((meal, index) => (
-                                <ul key={index}>
-                                    <li className="flex justify-between items-center mb-4">
-                                        <div>
-                                            <h3 className="font-bold">{meal.day}</h3>
-                                            <p>{meal.menu}</p>
-                                        </div>
-                                        <span className="bg-orange-500 text-white rounded-full px-4 py-2">{meal.time}</span>
-                                    </li>
-                                </ul>
-                            ))}
-                        </div>
+                        )}
+
+                        {/* User Details */}
+                        {isAuthenticated && data.userDetails && (
+                            <div className="bg-white rounded-lg shadow p-6">
+                                <h2 className="text-xl font-bold">User Details</h2>
+                                <p>Name: {data.userDetails.name}</p>
+                                <p>Age: {data.userDetails.age}</p>
+                                <p>Height: {data.userDetails.height} cm</p>
+                                <p>Mass: {data.userDetails.mass} kg</p>
+                                <p>BMI: {data.userDetails.BMI}</p>
+                                <p>Health Status: {data.userDetails.healthstatus}</p>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
         </>
     );
-}
+};
 
 export default Overview;

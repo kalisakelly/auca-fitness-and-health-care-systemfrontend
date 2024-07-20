@@ -84,7 +84,7 @@ const NavBar = () => {
   }, []);
 
   const handleDetails = () => {
-    navigate('/userdetails/:id?');
+    navigate(`/userdetails/${user.id}`);
   };
 
   const handleNotificationClick = () => {
@@ -98,6 +98,11 @@ const NavBar = () => {
     }).catch(error => {
       console.error('Error marking notifications as read:', error);
     });
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
   };
 
   return (
@@ -132,15 +137,15 @@ const NavBar = () => {
               label={
                 <Avatar className="h-6 w-6 border border-gray-900 p-0.5" src="https://docs.material-tailwind.com/img/face-2.jpg" alt="avatar" />
               }
+              style={{ zIndex: 50 }} // Ensure the dropdown is above other elements
             >
               <Dropdown.Header>
                 <span className="block text-sm">{user.name}</span>
                 <span className="block truncate text-sm font-medium">{user.email}</span>
               </Dropdown.Header>
-              <Dropdown.Item>Update Profile</Dropdown.Item>
               <Dropdown.Item onClick={handleDetails}>Health Details</Dropdown.Item>
               <Dropdown.Divider />
-              <Dropdown.Item>Log out</Dropdown.Item>
+              <Dropdown.Item onClick={handleLogout}>Log out</Dropdown.Item>
             </Dropdown>
           ) : (
             <Button onClick={() => navigate('/login')}>Login</Button>
