@@ -8,15 +8,22 @@ import HeaderBlock from '../components/Headerblock';
 import workoutImage from '../assets/workout.jpg';
 import StatisticCard from '../components/StatisticCard';
 import { Button } from 'flowbite-react';
-import {jwtDecode} from "jwt-decode";
+import {jwtDecode} from 'jwt-decode';
 
 const Overview = () => {
-    const [data, setData] = useState([]);
+    const [data, setData] = useState({
+        statistics: [],
+        goalProgress: {},
+        schedule: [],
+        weekPlan: {},
+        posts: [],
+        mySchedules: []
+    });
     const [loading, setLoading] = useState(true);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [hasSchedule, setHasSchedule] = useState(false);
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
@@ -29,11 +36,7 @@ const Overview = () => {
                     setIsAuthenticated(true);
                 }
 
-                const [statisticsRes, goalProgressRes, scheduleRes, weekPlanRes, postsRes, myScheduleRes] = await Promise.all([
-                    fetch('http://localhost:5000/statistics'),
-                    fetch('http://localhost:5000/goalProgress'),
-                    fetch('http://localhost:5000/schedule'),
-                    fetch('http://localhost:5000/weekPlan'),
+                const [postsRes, myScheduleRes] = await Promise.all([
                     axios.get('http://localhost:3001/blog', {
                         params: {
                             limit: 2,
@@ -41,7 +44,7 @@ const Overview = () => {
                         },
                     }),
                     isAuthenticated
-                        ? axios.get(`http://localhost:3001/schedules/user/${userId}`, {
+                        ? axios.get(`http://localhost:3001/schedules`, {
                             headers: {
                                 Authorization: `Bearer ${token}`
                             }
@@ -49,14 +52,14 @@ const Overview = () => {
                         : Promise.resolve({ data: [] })
                 ]);
 
-                const statistics = await statisticsRes.json();
-                const goalProgress = await goalProgressRes.json();
-                const schedule = await scheduleRes.json();
-                const weekPlan = await weekPlanRes.json();
                 const posts = postsRes.data.blogs || [];
                 const mySchedules = isAuthenticated ? myScheduleRes.data : [];
 
-                setData({ statistics, goalProgress, schedule, weekPlan, posts, mySchedules });
+                setData(prevData => ({
+                    ...prevData,
+                    posts,
+                    mySchedules
+                }));
                 setHasSchedule(mySchedules.length > 0);
                 setLoading(false);
             } catch (error) {
@@ -166,7 +169,7 @@ const Overview = () => {
                     {/* Right Column */}
                     <div className="lg:col-span-1">
                         {/* My Schedule */}
-                        {isAuthenticated && !hasSchedule && (
+                        {isAuthenticated && (
                             <div className="bg-white rounded-lg shadow p-6 mb-6">
                                 <div className="flex justify-between items-center mb-4">
                                     <h2 className="text-xl font-bold">Weekly schedule</h2>
@@ -174,18 +177,22 @@ const Overview = () => {
                                         <Button>Add New</Button>
                                     </a>
                                 </div>
-                                <ul>
-                                    {data.mySchedules.map((event, index) => (
-                                        <li key={index} className="flex justify-between items-center mb-4">
-                                            <div>
-                                                <h3 className="font-bold">{event.day}</h3>
-                                                <p>{event.activity}</p>
-                                                <p>{event.description}</p> {/* Add description here */}
-                                            </div>
-                                            <span className="bg-yellow-500 text-white rounded-full px-4 py-2">{event.time}</span>
-                                        </li>
-                                    ))}
-                                </ul>
+                                {hasSchedule ? (
+                                    <ul>
+                                        {data.mySchedules.map((event, index) => (
+                                            <li key={index} className="flex justify-between items-center mb-4">
+                                                <div>
+                                                    <h3 className="font-bold">{event.date}</h3>
+                                                    <p>{event.activity}</p>
+                                                    <p>{event.Details}</p> {/* Add description here */}
+                                                </div>
+                                                <span className="bg-yellow-500 text-white rounded-full px-4 py-2">{event.time}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <p>No schedule available.</p>
+                                )}
                             </div>
                         )}
 
@@ -197,7 +204,7 @@ const Overview = () => {
                                     View All &gt;
                                 </a>
                             </div>
-                            {data.weekPlan.meals.map((meal, index) => (
+                            {data.weekPlan.meals?.map((meal, index) => (
                                 <ul key={index}>
                                     <li className="flex justify-between items-center mb-4">
                                         <div>
