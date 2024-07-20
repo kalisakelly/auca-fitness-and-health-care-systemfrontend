@@ -9,6 +9,7 @@ const SignUp = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [hideModalTimeout, setHideModalTimeout] = useState(null);
@@ -20,10 +21,16 @@ const SignUp = () => {
     setUsername('');
     setEmail('');
     setPassword('');
+    setConfirmPassword('');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (password !== confirmPassword) {
+      setErrorMessage('Passwords do not match.');
+      return;
+    }
+
     try {
       const response = await axios.post('http://localhost:3001/auth/signup', {
         username,
@@ -36,7 +43,7 @@ const SignUp = () => {
         setShowSuccessModal(true);
         const timeoutId = setTimeout(() => {
           setShowSuccessModal(false);
-          navigate("/login");
+          navigate("/otp-verification");
           setHideModalTimeout(null); // Clear timeout ID
         }, 2000);
         setHideModalTimeout(timeoutId);
@@ -67,120 +74,80 @@ const SignUp = () => {
   };
 
   return (
-      <div className='grid grid-cols-2  items-stretch md:flex-row min-h-screen bg-blue-300 p-5 '>
-        <form onSubmit={handleSubmit} className=" self-center md:p-12 justify-center items-center gap-10">
-          <div className="mb-6">
-            <label htmlFor="username">
-              <Typography
-                variant="small"
-                className="mb-2 block font-medium text-black"
-              >
-                Username
-              </Typography>
-            </label>
-            <Input
-              id="username"
-              color="gray"
-              size="lg"
-              type="text"
-              name="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Your username"
-              className="w-64 placeholder:opacity-100 focus:border-t-primary border-black"
-              labelProps={{
-                className: "hidden",
-              }}
-            />
+    <div className="flex items-stretch md:flex-row min-h-screen bg-blue-500 p-5">
+      <form onSubmit={handleSubmit} className=" basis-1/2 self-center md:p-12 justify-center items-center gap-20">
+        {showSuccessModal && (
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            <div className="bg-green-500 text-white p-4 rounded">User registered successfully</div>
           </div>
-          <div className="mb-6">
-            <label htmlFor="email">
-              <Typography
-                variant="small"
-                className="mb-2 block font-medium text-black"
-              >
-                Your Email
-              </Typography>
-            </label>
-            <Input
-              id="email"
-              color="gray"
-              size="lg"
-              type="email"
-              name="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="name@mail.com"
-              className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
-              labelProps={{
-                className: "hidden",
-              }}
-            />
+        )}
+        <div className="flex flex-col items-center mt-8">
+          <img src="../public/auca.jpg" alt="AUCA Logo" className="rounded-full w-32 h-32 mb-8" />
+          <div className="w-full flex flex-col gap-4">
+            <div>
+              <label htmlFor="username" className="block text-white">Username</label>
+              <input
+                type="text"
+                id="username"
+                className="w-full p-2 border border-gray-300 rounded mt-1"
+                placeholder="Enter username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="email" className="block text-white">Email</label>
+              <input
+                type="email"
+                id="email"
+                className="w-full p-2 border border-gray-300 rounded mt-1"
+                placeholder="Enter email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="password" className="block text-white">Password</label>
+              <input
+                type={passwordShown ? "text" : "password"}
+                id="password"
+                className="w-full p-2 border border-gray-300 rounded mt-1"
+                placeholder="Enter password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <i onClick={togglePasswordVisibility}>
+                {passwordShown ? (
+                  <EyeIcon className="h-5 w-5" />
+                ) : (
+                  <EyeSlashIcon className="h-5 w-5" />
+                )}
+              </i>
+            </div>
+            <div>
+              <label htmlFor="confirmPassword" className="block text-white">Confirm Password</label>
+              <input
+                type={passwordShown ? "text" : "password"}
+                id="confirmPassword"
+                className="w-full p-2 border border-gray-300 rounded mt-1"
+                placeholder="Confirm password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+            </div>
           </div>
-          <div className="mb-6">
-            <label htmlFor="password">
-              <Typography
-                variant="small"
-                className="mb-2 block font-medium text-gray-900"
-              >
-                Password
-              </Typography>
-            </label>
-            <Input
-              size="lg"
-              placeholder="********"
-              labelProps={{
-                className: "hidden",
-              }}
-              className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
-              type={passwordShown ? "text" : "password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              icon={
-                <i onClick={togglePasswordVisibility}>
-                  {passwordShown ? (
-                    <EyeIcon className="h-5 w-5" />
-                  ) : (
-                    <EyeSlashIcon className="h-5 w-5" />
-                  )}
-                </i>
-              }
-            />
-          </div>
-          <Button color="gray" size="lg" className="mt-6" fullWidth type="submit">
-            Sign Up
-          </Button>
-          <div className="!mt-4 flex justify-end">
-          </div>
-          <Button
-            variant="outlined"
-            size="lg"
-            className="mt-6 flex h-12 items-center justify-center gap-2"
-            fullWidth
-          >
-            <img
-              src={`https://www.material-tailwind.com/logos/logo-google.png`}
-              alt="google"
-              className="h-6 w-6"
-            />{" "}
-            Sign Up with Google
-          </Button>
-          <Typography
-            variant="small"
-            color="gray"
-            className="!mt-4 text-center font-normal"
-          >
-            Registered?{" "}
-            <a href="#" className="font-medium text-gray-900" onClick={handleUserRegistration}>
-              Login
-            </a>
-          </Typography>
-          {errorMessage && <p className="text-red-500 mt-4">{errorMessage}</p>}
-        </form>
-        <div className="hidden md:flex bg-cover" style={{ backgroundImage: 'url(src/assets/password2.png)' }}>
         </div>
-        
-      </div>
+        <div className="mt-10 grid grid-cols-2 gap-2">
+          <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">Sign Up</button>
+          <button type="button" className="bg-gray-500 text-white px-4 py-2 rounded" onClick={handleUserRegistration}>Register</button>
+        </div>
+      </form>
+      <div className="basis-1/2 hidden md:flex justify-center items-center bg-cover" style={{ backgroundImage: 'url(../public/Running.png)' }}></div>
+    </div>
   );
 }
 

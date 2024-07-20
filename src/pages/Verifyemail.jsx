@@ -48,10 +48,9 @@ const Otp = () => {
   }
 
   return (
-    <div className="flex h-screen  bg-blue-500">
-      <div className="w-1/2 flex flex-col justify-center items-center text-white p-8">
-        <h1 className="text-4xl font-bold mb-4">OTP VERIFICATION</h1>
-        <p className="text-lg mb-8">Verify With OTP</p>
+    <div className="flex items-center justify-center min-h-screen bg-blue-500 p-5">
+      <form className="bg-white p-8 rounded-lg shadow-lg w-96">
+        <h2 className="text-2xl font-bold mb-4">OTP Verification</h2>
         <p className="mb-4">Enter the OTP received on your email</p>
         <div className="flex space-x-4 mb-8">
           {otp.map((digit, index) => (
@@ -71,10 +70,8 @@ const Otp = () => {
         {error && <p className="text-red-500">{error}</p>}
         <button onClick={handleSubmit} className="bg-black text-white px-6 py-3 rounded-lg mb-4">Verify with OTP</button>
         <p className="text-red-500">Resend OTP in: <span className="text-red-700">00:30</span></p>
-      </div>
-      <div className="w-1/2 flex  md:flex bg-cover" style={{ backgroundImage: 'url(src/assets/password2.png)' }}>
-
-    </div>
+      </form>
+      <div className="basis-1/2 hidden md:flex justify-center items-center bg-cover" style={{ backgroundImage: 'url(../public/Running.png)' }}></div>
     </div>
   );
 };

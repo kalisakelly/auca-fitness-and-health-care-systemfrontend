@@ -71,45 +71,34 @@ const DietPlan = () => {
       <div className="flex-1 p-6">
         <div className="flex flex-col md:flex-row mb-6">
           <div className="md:w-2/3">
-            <form onSubmit={handleSearchSubmit} className="mb-4">
+            <form onSubmit={handleSearchSubmit} className="mb-4 flex gap-2">
               <input
                 type="text"
                 value={searchQuery}
                 onChange={handleSearchChange}
                 placeholder="Search nutrients..."
-                className="w-full p-2 border rounded mb-2"
+                className="w-full p-2 border rounded mb-2 md:mb-0"
               />
               <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded-md">Search</button>
             </form>
-            <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {nutritionList.map((nutrition) => (
-                    <tr key={nutrition.id}>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                      {nutrition.image && (
-                          <img
-                            src={nutrition.image}
-                            alt={nutrition.name}
-                            className="h-10 w-10 rounded-full"
-                          />
-                        )}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap cursor-pointer" onClick={() => handleViewDetails(nutrition.id)}>
-                        {nutrition.name}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">{nutrition.description}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">{nutrition.category}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {nutritionList.map((nutrition) => (
+                <div key={nutrition.id} className="bg-white p-4 rounded-lg shadow-lg">
+                  {nutrition.image && (
+                    <img
+                      src={nutrition.image}
+                      alt={nutrition.name}
+                      className="w-full h-40 object-cover rounded-t-lg"
+                    />
+                  )}
+                  <div className="p-4">
+                    <h2 className="text-lg font-bold mb-2 cursor-pointer" onClick={() => handleViewDetails(nutrition.id)}>
+                      {nutrition.name}
+                    </h2>
+                    <p className="text-gray-700 mb-2">{nutrition.description}</p>
+                    <p className="text-gray-500 mb-4">{nutrition.category}</p>
+                    {(userRole === 'admin' || userRole === 'nutritionist') && (
+                      <div className="flex justify-between">
                         <button
                           onClick={() => handleEdit(nutrition.id)}
                           className="text-indigo-600 hover:text-indigo-900"
@@ -118,15 +107,15 @@ const DietPlan = () => {
                         </button>
                         <button
                           onClick={() => handleRemove(nutrition.id)}
-                          className="ml-4 text-red-600 hover:text-red-900"
+                          className="text-red-600 hover:text-red-900"
                         >
                           Remove
                         </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
             <div className="mt-4 flex justify-between items-center">
               <button

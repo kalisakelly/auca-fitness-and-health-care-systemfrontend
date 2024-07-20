@@ -40,12 +40,19 @@ const adminLinks = [
   { to: "/Adminpage", icon: UsersIcon, label: "Admin Page" }
 ];
 
+const nonLinks = [
+  { to: "/", icon: HomeIcon, label: "Overview" },
+  { to: "/DietPlan", icon: SaladIcon, label: "Diet Plan" },
+  { to: "/Blogs", icon: BugIcon, label: "Blogs" },
+  { to: "/Workout", icon: DumbbellIcon, label: "Videos" },
+];
+
 const Sidebar = () => {
   const userRole = localStorage.getItem('userRole');
   const isAuthenticated = !!localStorage.getItem('userToken');
   const navigate = useNavigate();
 
-  const handleLogout = () => {
+  const handleLogout =() => {
     localStorage.removeItem('userToken');
     localStorage.removeItem('userRole');
     navigate('/Login');
@@ -54,7 +61,9 @@ const Sidebar = () => {
   const getLinks = () => {
     if (userRole === 'admin') return adminLinks;
     if (userRole === 'nutritionist') return nutritionistLinks;
-    return userLinks;
+    if (userRole === 'user') return userLinks;
+
+    return nonLinks;
   };
 
   const links = getLinks();

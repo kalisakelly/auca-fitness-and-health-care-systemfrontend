@@ -8,7 +8,7 @@ const SchedulePage = () => {
   const [date, setDate] = useState('');
   const [hour, setHour] = useState('');
   const [minute, setMinute] = useState('');
-  const [Details, setDetails] = useState('');
+  const [details, setDetails] = useState('');
   const [editingId, setEditingId] = useState(null);
   const navigate = useNavigate();
 
@@ -22,7 +22,7 @@ const SchedulePage = () => {
       if (token) {
         const decodedToken = jwtDecode(token);
         const userId = decodedToken.id;
-        const response = await axios.get(`http://localhost:3001/schedules/myschedule`, {
+        const response = await axios.get(`http://localhost:3001/schedules`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -42,7 +42,7 @@ const SchedulePage = () => {
       navigate('/login');
       return;
     }
-    const schedule = { date, hour: parseInt(hour), minute: parseInt(minute), Details };
+    const schedule = { date, hour: parseInt(hour), minute: parseInt(minute), details };
     try {
       if (editingId) {
         await axios.put(`http://localhost:3001/schedules/${editingId}`, schedule, {
@@ -74,7 +74,7 @@ const SchedulePage = () => {
     setDate(schedule.date);
     setHour(schedule.hour.toString());
     setMinute(schedule.minute.toString());
-    setDetails(schedule.Details);
+    setDetails(schedule.details);
     setEditingId(schedule.id);
   };
 
@@ -107,8 +107,8 @@ const SchedulePage = () => {
 
   return (
     <div className="container mx-auto py-6">
-      <h2 className="text-2xl font-bold mb-6">Schedule</h2>
-      <form onSubmit={handleSubmit} className="mb-8 bg-white p-6 rounded shadow-md">
+      <h2 className="text-3xl font-bold mb-6 text-center">My Schedule</h2>
+      <form onSubmit={handleSubmit} className="mb-8 bg-white p-6 rounded shadow-lg">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
           <input
             type="date"
@@ -139,7 +139,7 @@ const SchedulePage = () => {
           />
           <input
             type="text"
-            value={Details}
+            value={details}
             onChange={(e) => setDetails(e.target.value)}
             className="border p-2 rounded w-full"
             placeholder="Details"
@@ -147,11 +147,11 @@ const SchedulePage = () => {
           />
         </div>
         <div className="flex justify-end space-x-4">
-          <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+          <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-200">
             {editingId ? 'Update Schedule' : 'Add Schedule'}
           </button>
           {editingId && (
-            <button type="button" onClick={resetForm} className="bg-gray-500 text-white px-4 py-2 rounded">
+            <button type="button" onClick={resetForm} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition duration-200">
               Cancel
             </button>
           )}
@@ -170,13 +170,13 @@ const SchedulePage = () => {
                 <div>
                   <p className="font-bold text-lg">{schedule.date}</p>
                   <p className="text-gray-700">{`${schedule.hour.toString().padStart(2, '0')}:${schedule.minute.toString().padStart(2, '0')}`}</p>
-                  <p className="text-gray-700">{schedule.Details}</p>
+                  <p className="text-gray-700">{schedule.details}</p>
                 </div>
                 <div className="flex space-x-2">
-                  <button onClick={() => handleEdit(schedule)} className="bg-yellow-500 text-white px-4 py-2 rounded">
+                  <button onClick={() => handleEdit(schedule)} className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition duration-200">
                     Edit
                   </button>
-                  <button onClick={() => handleDelete(schedule.id)} className="bg-red-500 text-white px-4 py-2 rounded">
+                  <button onClick={() => handleDelete(schedule.id)} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition duration-200">
                     Delete
                   </button>
                 </div>
