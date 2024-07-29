@@ -233,7 +233,7 @@ const Overview = () => {
                                             <li key={index} className="flex justify-between items-center mb-4">
                                                 <div>
                                                     <h3 className="font-bold">{event.date}</h3>
-                                                    <p>{event.details}</p> {/* Assuming you have 'details' property in event */}
+                                                    <p>{event.Details}</p> {/* Assuming you have 'details' property in event */}
                                                 </div>
                                                 <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                                     Start

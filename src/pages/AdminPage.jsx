@@ -8,23 +8,39 @@ import { useNavigate } from 'react-router-dom';
 
 const Adminpage = () => {
   const [videoCount, setVideoCount] = useState(0);
+  const [nutritionCount, setNutritionCount] = useState(0);
+  const [blogCount, setBlogCount] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchVideoCount = async () => {
+    const fetchCounts = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/videos/count');
-        setVideoCount(response.data.count);
+        const videoResponse = await axios.get('c');
+        setVideoCount(videoResponse.data.count);
+
+        const nutritionResponse = await axios.get('http://localhost:3001/nutrition/count');
+        setNutritionCount(nutritionResponse.data.count);
+
+        const blogResponse = await axios.get('http://localhost:3001/blogs/count');
+        setBlogCount(blogResponse.data.count);
       } catch (error) {
-        console.error('Error fetching video count:', error);
+        console.error('Error fetching counts:', error);
       }
     };
 
-    fetchVideoCount();
+    fetchCounts();
   }, []);
 
   const handleAddVideo = () => {
-    navigate('/VideoFormPage');
+    navigate('/home/VideoFormPage');
+  };
+
+  const handleAddNutrition = () => {
+    navigate('/home/NutritionFormPage');
+  };
+
+  const handleAddBlog = () => {
+    navigate('/home/BlogFormPage');
   };
 
   return (
@@ -40,11 +56,17 @@ const Adminpage = () => {
         </div>
         <div className="bg-blue-500 text-white p-4 rounded-lg shadow text-center">
           <h3 className="text-xl mb-2">Nutrition</h3>
-          {/* Add your content here */}
+          <p className="text-3xl mb-4">{nutritionCount}</p>
+          <button className="bg-gray-800 text-white p-2 rounded mb-2" onClick={handleAddNutrition}>
+            Add New Nutrition
+          </button>
         </div>
         <div className="bg-blue-500 text-white p-4 rounded-lg shadow text-center">
           <h3 className="text-xl mb-2">Blogs</h3>
-          {/* Add your content here */}
+          <p className="text-3xl mb-4">{blogCount}</p>
+          <button className="bg-gray-800 text-white p-2 rounded mb-2" onClick={handleAddBlog}>
+            Add New Blog
+          </button>
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">

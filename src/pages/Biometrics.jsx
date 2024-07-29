@@ -35,7 +35,7 @@ const Biometrics = () => {
       <div className="flex flex-col items-center justify-center h-screen">
         <p className="mb-4">No user details found.</p>
         <Button
-          onClick={() => navigate('/UserDetailsForm')}
+          onClick={() => navigate('/home/UserDetailsForm')}
           className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md"
         >
           Add Your Details

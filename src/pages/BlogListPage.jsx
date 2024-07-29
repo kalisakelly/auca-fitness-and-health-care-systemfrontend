@@ -61,7 +61,7 @@ const BlogListPage = () => {
       <div className="flex justify-between mb-6">
         <h1 className="text-3xl font-bold">Blogs</h1>
         <button
-          onClick={() => navigate('/add-blog')}
+          onClick={() => navigate('/home/add-blog')}
           className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
         >
           Add New Blog
@@ -94,7 +94,7 @@ const BlogListPage = () => {
                 <span className="text-gray-600">{blog.likes || 0} likes</span>
               </div>
               <button
-                onClick={() => navigate(`/blog/${blog.id}`)}
+                onClick={() => navigate(`/home/blog/${blog.id}`)}
                 className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
               >
                 Read More

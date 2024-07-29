@@ -12,39 +12,39 @@ import {
 } from '../assets/icons';
 
 const userLinks = [
-  { to: "/", icon: HomeIcon, label: "Overview" },
-  { to: "/DietPlan", icon: SaladIcon, label: "Diet Plan" },
-  { to: "/Blogs", icon: BugIcon, label: "Blogs" },
-  { to: "/Workout", icon: DumbbellIcon, label: "Videos" },
-  { to: "/MySchedule", icon: CalendarIcon, label: "Schedule" },
-  { to: "/Biometrics", icon: BarChartIcon, label: "Biometrics" }
+  { to: "/home", icon: HomeIcon, label: "Overview" },
+  { to: "/home/DietPlan", icon: SaladIcon, label: "Diet Plan" },
+  { to: "/home/Blogs", icon: BugIcon, label: "Blogs" },
+  { to: "/home/Workout", icon: DumbbellIcon, label: "Videos" },
+  { to: "/home/MySchedule", icon: CalendarIcon, label: "Schedule" },
+  { to: "/home/Biometrics", icon: BarChartIcon, label: "Biometrics" }
 ];
 
 const nutritionistLinks = [
-  { to: "/", icon: HomeIcon, label: "Overview" },
-  { to: "/DietPlan", icon: SaladIcon, label: "Diet Plan" },
-  { to: "/Blogs", icon: BugIcon, label: "Blogs" },
-  { to: "/Workout", icon: DumbbellIcon, label: "Videos" },
-  { to: "/MySchedule", icon: CalendarIcon, label: "Schedule" },
-  { to: "/Biometrics", icon: BarChartIcon, label: "Biometrics" },
-  { to: "/UserDetail", icon: FilePenIcon, label: "User Details" }
+  { to: "/home", icon: HomeIcon, label: "Overview" },
+  { to: "/home/DietPlan", icon: SaladIcon, label: "Diet Plan" },
+  { to: "/home/Blogs", icon: BugIcon, label: "Blogs" },
+  { to: "/home/Workout", icon: DumbbellIcon, label: "Videos" },
+  { to: "/home/MySchedule", icon: CalendarIcon, label: "Schedule" },
+  { to: "//homeBiometrics", icon: BarChartIcon, label: "Biometrics" },
+  { to: "/home/UserDetail", icon: FilePenIcon, label: "User Details" }
 ];
 
 const adminLinks = [
-  { to: "/", icon: HomeIcon, label: "Overview" },
-  { to: "/DietPlan", icon: SaladIcon, label: "Diet Plan" },
-  { to: "/Blogs", icon: BugIcon, label: "Blogs" },
-  { to: "/Workout", icon: DumbbellIcon, label: "Videos" },
-  { to: "/MySchedule", icon: CalendarIcon, label: "Schedule" },
-  { to: "/Biometrics", icon: BarChartIcon, label: "Biometrics" },
-  { to: "/Adminpage", icon: UsersIcon, label: "Admin Page" }
+  { to: "/home", icon: HomeIcon, label: "Overview" },
+  { to: "/home/DietPlan", icon: SaladIcon, label: "Diet Plan" },
+  { to: "/home/Blogs", icon: BugIcon, label: "Blogs" },
+  { to: "/home/Workout", icon: DumbbellIcon, label: "Videos" },
+  { to: "/home/MySchedule", icon: CalendarIcon, label: "Schedule" },
+  { to: "/home/Biometrics", icon: BarChartIcon, label: "Biometrics" },
+  { to: "/home/Adminpage", icon: UsersIcon, label: "Admin Page" }
 ];
 
 const nonLinks = [
-  { to: "/", icon: HomeIcon, label: "Overview" },
-  { to: "/DietPlan", icon: SaladIcon, label: "Diet Plan" },
-  { to: "/Blogs", icon: BugIcon, label: "Blogs" },
-  { to: "/Workout", icon: DumbbellIcon, label: "Videos" },
+  { to: "/home", icon: HomeIcon, label: "Overview" },
+  { to: "/home/DietPlan", icon: SaladIcon, label: "Diet Plan" },
+  { to: "/home/Blogs", icon: BugIcon, label: "Blogs" },
+  { to: "/home/Workout", icon: DumbbellIcon, label: "Videos" },
 ];
 
 const Sidebar = () => {

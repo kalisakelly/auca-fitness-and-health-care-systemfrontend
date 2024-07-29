@@ -33,35 +33,35 @@ const router = createBrowserRouter(
     <Route>
       
       <Route path='/SignUp' element={<SignUp />} />
-      <Route path='/Login' element={<Login />} />
+      <Route path='/' element={<Login />} />
       <Route path='/OTP' element={<Otp />} />
       <Route path= "/Forgot-password" element={<RequestPasswordReset/>} />
       <Route path='/Reset-password' element={<ResetPassword/>}/>
       <Route path="/blog/:id" element={<BlogDetail />} />
-      <Route path='/' element={<MainLayout />}>
+      <Route path='/home' element={<MainLayout />}>
         <Route index element={<HomePage />} />
         <Route path='*' element={<NotFoundPage />} />
-        <Route path="/blogs" element={<BlogListPage />} />
-        <Route path="/blog/:id" element={<BlogDetailsPage />} />
-        <Route path="/add-blog" element={<AddEditBlogPage />} />
-        <Route path="/edit-blog/:id" element={<AddEditBlogPage />} />
-        <Route path='/UserDetailsForm' element={<UserDetailsForm />} />
-        <Route path='VideoFormPage' element={<VideoFormPage />} />
-        <Route path="/nutrition" element={<NutritionPage />} />
-        <Route path="/userdetails/:id?" element={<UserDetailPage />} />
-        <Route  path='Workout' element={<Workout />} />
-        <Route  path='DietPlan'  element={  <DietPlan /> }  />
-        <Route path="/nutrition/add" element={<AddNutrition />} />
-        <Route path="/nutrition/:id" element={<NutritionDetails />} />
-        <Route   path='Questions' element={ <Questions /> } />
-        <Route path='MySchedule'   element={   <MySchedule />} />
-        <Route path='Biometrics' element={<Biometrics />} />
-        <Route path='PostPage' element={<PostPage />} />
-        <Route path='Adminpage' element={  <Adminpage />} />
-        <Route path='Exercise' element={  <Exercise />} />
-        <Route path="BlogDetail" element={<BlogDetail />} />
-        <Route path="UploadVideo" element={<VideoFormPage />} />
-         <Route path="Videos" element={<VideoListPage />} />
+        <Route path="/home/blogs" element={<BlogListPage />} />
+        <Route path="/home/blog/:id" element={<BlogDetailsPage />} />
+        <Route path="/home/add-blog" element={<AddEditBlogPage />} />
+        <Route path="/home/edit-blog/:id" element={<AddEditBlogPage />} />
+        <Route path='/home/UserDetailsForm' element={<UserDetailsForm />} />
+        <Route path='/home/VideoFormPage' element={<VideoFormPage />} />
+        <Route path="/home/nutrition" element={<NutritionPage />} />
+        <Route path="/home/userdetails/:id?" element={<UserDetailPage />} />
+        <Route  path='/home/Workout' element={<Workout />} />
+        <Route  path='/home/DietPlan'  element={  <DietPlan /> }  />
+        <Route path="/home/nutrition/add" element={<AddNutrition />} />
+        <Route path="/home/nutrition/:id" element={<NutritionDetails />} />
+        <Route   path='/home/Questions' element={ <Questions /> } />
+        <Route path='/home/MySchedule'   element={   <MySchedule />} />
+        <Route path='/home/Biometrics' element={<Biometrics />} />
+        <Route path='/home/PostPage' element={<PostPage />} />
+        <Route path='/home/Adminpage' element={  <Adminpage />} />
+        <Route path='/home/Exercise' element={  <Exercise />} />
+        <Route path="/home/BlogDetail" element={<BlogDetail />} />
+        <Route path="/home/UploadVideo" element={<VideoFormPage />} />
+         <Route path="/home/Videos" element={<VideoListPage />} />
       </Route>
     </Route>
   )

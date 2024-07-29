@@ -97,9 +97,11 @@ const VideoForm = ({ onUpload }) => {
             required
           >
             <option value="" disabled>Select Category</option>
-            <option value="Fitness">Fitness</option>
-            <option value="Nutrition">Nutrition</option>
-            <option value="Wellness">Wellness</option>
+            <option value="Yoga">Yoga</option>
+            <option value="Cardio">Cardio</option>
+            <option value="Walking exercises">Walking</option>
+            <option value="Burn calories">Burn calories</option>
+
           </select>
         </div>
         <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">Upload Video</button>

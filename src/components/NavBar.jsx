@@ -84,7 +84,7 @@ const NavBar = () => {
   }, []);
 
   const handleDetails = () => {
-    navigate(`/UserDetailsForm`);
+    navigate(`/home/UserDetailsForm`);
   };
 
   const handleNotificationClick = () => {

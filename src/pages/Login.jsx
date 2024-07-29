@@ -31,7 +31,7 @@ const SignIn = () => {
           setShowSuccessModal(true);
           const timeoutId = setTimeout(() => {
             setShowSuccessModal(false);
-            navigate("/Overview");
+            navigate("/home");
             setHideModalTimeout(timeoutId);
           }, 2000);
         } else {
