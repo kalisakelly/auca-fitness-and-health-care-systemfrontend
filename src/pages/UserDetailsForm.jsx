@@ -10,6 +10,8 @@ const UserDetailsForm = ({ isEdit }) => {
     height: '',
     mass: '',
     age: '',
+    BMI: '',
+    healthstatus: '',
     gender: '',
     yearofbirth: '',
     physicalActivityLevel: 'Sedentary',
@@ -37,22 +39,16 @@ const UserDetailsForm = ({ isEdit }) => {
   const [formState, setFormState] = useState(defaultFormData);
 
   useEffect(() => {
-    console.log('useEffect called');
-    console.log('isEdit:', isEdit);
-
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get(
-          'http://localhost:3001/userdetails/user/test'
-        );
-        console.log('Fetched user data:', response.data);
-        setFormState(response.data);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
-
     if (isEdit) {
+      const fetchUserData = async () => {
+        try {
+          const response = await axios.get('http://localhost:3001/userdetails/user/test');
+          console.log('Fetched user data:', response.data);
+          setFormState(response.data);
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      };
       fetchUserData();
     }
   }, [isEdit]);
@@ -70,18 +66,10 @@ const UserDetailsForm = ({ isEdit }) => {
         height: formState.height ? parseFloat(formState.height) : null,
         mass: formState.mass ? parseFloat(formState.mass) : null,
         age: formState.age ? parseInt(formState.age, 10) : null,
-        yearofbirth: formState.yearofbirth
-          ? parseInt(formState.yearofbirth, 10)
-          : null,
-        waistCircumference: formState.waistCircumference
-          ? parseFloat(formState.waistCircumference)
-          : null,
-        hipCircumference: formState.hipCircumference
-          ? parseFloat(formState.hipCircumference)
-          : null,
-        bodyFatPercentage: formState.bodyFatPercentage
-          ? parseFloat(formState.bodyFatPercentage)
-          : null,
+        yearofbirth: formState.yearofbirth ? parseInt(formState.yearofbirth, 10) : null,
+        waistCircumference: formState.waistCircumference ? parseFloat(formState.waistCircumference) : null,
+        hipCircumference: formState.hipCircumference ? parseFloat(formState.hipCircumference) : null,
+        bodyFatPercentage: formState.bodyFatPercentage ? parseFloat(formState.bodyFatPercentage) : null,
       };
 
       const config = {
@@ -93,17 +81,9 @@ const UserDetailsForm = ({ isEdit }) => {
 
       let response;
       if (isEdit) {
-        response = await axios.patch(
-          `http://localhost:3001/userdetails/${formState.id}`,
-          data,
-          config
-        );
+        response = await axios.patch(`http://localhost:3001/userdetails/${formState.id}`, data, config);
       } else {
-        response = await axios.post(
-          'http://localhost:3001/userdetails',
-          data,
-          config
-        );
+        response = await axios.post('http://localhost:3001/userdetails', data, config);
       }
 
       console.log('User details saved:', response.data);
@@ -121,9 +101,7 @@ const UserDetailsForm = ({ isEdit }) => {
       {Object.keys(defaultFormData).map((key) => (
         <div style={styles.fieldGroup} key={key}>
           <label style={styles.label}>
-            {key.charAt(0).toUpperCase() +
-              key.slice(1).replace(/([A-Z])/g, ' $1')}
-            :
+            {key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')}:
           </label>
           {key === 'physicalActivityLevel' ? (
             <select
@@ -136,46 +114,26 @@ const UserDetailsForm = ({ isEdit }) => {
               <option value="moderate exercise or sports 2-3 days/week">
                 Moderate exercise or sports 2-3 days/week
               </option>
-              <option value="Vigorously_active_lifestyle">
-                Vigorously active lifestyle
-              </option>
+              <option value="Vigorously_active_lifestyle">Vigorously active lifestyle</option>
             </select>
-          ) : key.includes('History') ||
-            key.includes('Goals') ||
-            key.includes('Results') ||
-            key.includes('Data') ||
-            key.includes('Intake') ||
-            key.includes('Info') ||
+          ) : key.includes('History') || key.includes('Goals') || key.includes('Results') ||
+            key.includes('Data') || key.includes('Intake') || key.includes('Info') ||
             key.includes('Network') ? (
             <textarea
               name={key}
               value={formState[key]}
               onChange={handleChange}
               style={styles.textarea}
-              placeholder={`Enter ${key
-                .replace(/([A-Z])/g, ' $1')
-                .toLowerCase()}`}
+              placeholder={`Enter ${key.replace(/([A-Z])/g, ' $1').toLowerCase()}`}
             />
           ) : (
             <input
-              type={
-                key === 'age' ||
-                key === 'yearofbirth' ||
-                key === 'height' ||
-                key === 'mass' ||
-                key === 'waistCircumference' ||
-                key === 'hipCircumference' ||
-                key === 'bodyFatPercentage'
-                  ? 'number'
-                  : 'text'
-              }
+              type={['height', 'mass', 'age', 'yearofbirth', 'waistCircumference', 'hipCircumference', 'bodyFatPercentage'].includes(key) ? 'number' : 'text'}
               name={key}
               value={formState[key]}
               onChange={handleChange}
               style={styles.input}
-              placeholder={`Enter ${key
-                .replace(/([A-Z])/g, ' $1')
-                .toLowerCase()}`}
+              placeholder={`Enter ${key.replace(/([A-Z])/g, ' $1').toLowerCase()}`}
             />
           )}
         </div>

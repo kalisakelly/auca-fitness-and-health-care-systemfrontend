@@ -82,7 +82,7 @@ const SignUp = () => {
           </div>
         )}
         <div className="flex flex-col items-center mt-8">
-          <img src="../public/auca.jpg" alt="AUCA Logo" className="rounded-full w-32 h-32 mb-8" />
+          <img src="/auca.jpg" alt="AUCA Logo" className="rounded-full w-32 h-32 mb-8" />
           <div className="w-full flex flex-col gap-4">
             <div>
               <label htmlFor="username" className="block text-white">Username</label>
@@ -146,7 +146,7 @@ const SignUp = () => {
           <button type="button" className="bg-gray-500 text-white px-4 py-2 rounded" onClick={handleUserRegistration}>Register</button>
         </div>
       </form>
-      <div className="basis-1/2 hidden md:flex justify-center items-center bg-cover" style={{ backgroundImage: 'url(../public/Running.png)' }}></div>
+      <div className="basis-1/2 hidden md:flex justify-center items-center bg-cover" style={{ backgroundImage: 'url(/Running.png)' }}></div>
     </div>
   );
 }

@@ -69,9 +69,9 @@ const Otp = () => {
         </div>
         {error && <p className="text-red-500">{error}</p>}
         <button onClick={handleSubmit} className="bg-black text-white px-6 py-3 rounded-lg mb-4">Verify with OTP</button>
-        <p className="text-red-500">Resend OTP in: <span className="text-red-700">00:30</span></p>
+        {/* <p className="text-red-500">Resend OTP in: <span className="text-red-700">00:30</span></p> */}
       </form>
-      <div className="basis-1/2 hidden md:flex justify-center items-center bg-cover" style={{ backgroundImage: 'url(../public/Running.png)' }}></div>
+      <div className="basis-1/2 hidden md:flex justify-center items-center bg-cover" style={{ backgroundImage: 'url(/Running.png)' }}></div>
     </div>
   );
 };

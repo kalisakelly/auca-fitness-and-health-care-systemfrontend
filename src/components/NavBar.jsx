@@ -102,7 +102,7 @@ const NavBar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    navigate('/login');
+    navigate('/');
   };
 
   return (
@@ -148,7 +148,7 @@ const NavBar = () => {
               <Dropdown.Item onClick={handleLogout}>Log out</Dropdown.Item>
             </Dropdown>
           ) : (
-            <Button onClick={() => navigate('/login')}>Login</Button>
+            <Button onClick={() => navigate('/')}>Login</Button>
           )}
           <div className="relative flex w-full gap-2 md:w-max"></div>
         </div>

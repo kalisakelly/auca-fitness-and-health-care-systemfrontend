@@ -86,7 +86,7 @@ const SignIn = () => {
         )}
 
         <div className="flex flex-col items-center mt-8">
-          <img src="../public/auca.jpg" alt="AUCA Logo" className="rounded-full w-32 h-32 mb-8" />
+          <img src="/auca.jpg" alt="AUCA Logo" className="rounded-full w-32 h-32 mb-8" />
           <div className="w-full flex flex-col gap-4">
             <div>
               <label htmlFor="email" className="block text-white">Email</label>
@@ -121,7 +121,7 @@ const SignIn = () => {
         </div>
         <button type="button" className="mt-10 text-white" onClick={handleForgotPassword}>Forgot password</button>
       </form>
-      <div className="basis-1/2 hidden md:flex justify-center items-center bg-cover" style={{ backgroundImage: 'url(../public/Running.png)' }}></div>
+      <div className="basis-1/2 hidden md:flex justify-center items-center bg-cover" style={{ backgroundImage: 'url(/Running.png)' }}></div>
     </div>
   );
 };
