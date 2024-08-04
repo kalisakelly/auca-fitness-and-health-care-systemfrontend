@@ -47,11 +47,11 @@ const NavBar = () => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          console.log('Token:', token); // Debugging line
+          // console.log('Token:', token); // Debugging line
           const decodedToken = jwtDecode(token);
-          console.log('Decoded Token:', decodedToken); // Debugging line
+          // console.log('Decoded Token:', decodedToken); // Debugging line
           const userId = decodedToken.id;
-          console.log('User ID:', userId); // Debugging line
+          // console.log('User ID:', userId); // Debugging line
 
           // Fetch user details from the server
           const response = await axios.get(`http://localhost:3001/users/${userId}`, {

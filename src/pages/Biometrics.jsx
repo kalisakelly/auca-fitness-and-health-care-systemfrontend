@@ -15,7 +15,7 @@ const Biometrics = () => {
         if (token) {
           const decodedToken = jwtDecode(token);
           const userId = decodedToken.id;
-          const response = await axios.get(`http://localhost:3001/user/${userId}`, {
+          const response = await axios.get(`http://localhost:3001/userdetails/user/test`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
@@ -91,15 +91,15 @@ const Biometrics = () => {
             <div>
               <h2 className="text-xl font-bold mb-4">Medical History</h2>
               <div className="space-y-2">
-                <div className="flex justify-between">
+                {/* <div className="flex justify-between">
                   <span className="font-medium">Allergies:</span>
                   <span>{userDetails.allergies.join(', ')}</span>
-                </div>
-                <div className="flex justify-between">
+                </div> */}
+                {/* <div className="flex justify-between">
                   <span className="font-medium">Chronic Conditions:</span>
                   <span>{userDetails.chronicConditions.join(', ')}</span>
-                </div>
-                <div className="flex justify-between">
+                </div> */}
+                {/* <div className="flex justify-between">
                   <span className="font-medium">Medications:</span>
                   <span>{userDetails.medications.join(', ')}</span>
                 </div>
@@ -110,7 +110,7 @@ const Biometrics = () => {
                 <div className="flex justify-between">
                   <span className="font-medium">Family History:</span>
                   <span>{userDetails.familyHistory.join(', ')}</span>
-                </div>
+                </div> */}
               </div>
             </div>
             <div>

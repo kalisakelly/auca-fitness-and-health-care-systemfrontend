@@ -57,7 +57,7 @@ const Overview = () => {
                         })
                         : Promise.resolve({ data: [] }),
                     isAuthenticated
-                        ? axios.get(`http://localhost:3001/userdetails/user/${userId}`, {
+                        ? axios.get(`http://localhost:3001/userdetails/user/test`, {
                             headers: {
                                 Authorization: `Bearer ${token}`
                             }
@@ -68,6 +68,11 @@ const Overview = () => {
                             headers: {
                                 Authorization: `Bearer ${token}`
                             }
+                        }).catch(error => {
+                            if (error.response && error.response.status === 404) {
+                                return { data: {} }; // Handle 404 error by returning empty data
+                            }
+                            throw error;
                         })
                         : Promise.resolve({ data: {} })
                 ]);
@@ -223,7 +228,7 @@ const Overview = () => {
                             <div className="bg-white rounded-lg shadow p-6 mb-6">
                                 <div className="flex justify-between items-center mb-4">
                                     <h2 className="text-xl font-bold">Weekly schedule</h2>
-                                    <a href="/MySchedule" className="text-orange-500 hover:text-orange-700">
+                                    <a href="/home/MySchedule" className="text-orange-500 hover:text-orange-700">
                                         <Button>Add New</Button>
                                     </a>
                                 </div>
@@ -233,7 +238,7 @@ const Overview = () => {
                                             <li key={index} className="flex justify-between items-center mb-4">
                                                 <div>
                                                     <h3 className="font-bold">{event.date}</h3>
-                                                    <p>{event.Details}</p> {/* Assuming you have 'details' property in event */}
+                                                    <p>{event.details}</p> {/* Assuming you have 'details' property in event */}
                                                 </div>
                                                 <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                                     Start

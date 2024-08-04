@@ -11,7 +11,6 @@ import ProtectedRoute from './components/ProtectedRoute';
 import VideoFormPage from './pages/AddVideo'; 
 import VideoListPage from './pages/VideoListPage';
 import NutritionPage from './pages/NutritionPage';
-import UserDetailPage from './pages/UserDetailPage';
 import NotFoundPage from './pages/NotFoundPage';
 import BlogListPage from './pages/BlogListPage';
 import BlogDetailsPage from './pages/BlogDetailsPage';
@@ -48,7 +47,6 @@ const router = createBrowserRouter(
         <Route path='/home/UserDetailsForm' element={<UserDetailsForm />} />
         <Route path='/home/VideoFormPage' element={<VideoFormPage />} />
         <Route path="/home/nutrition" element={<NutritionPage />} />
-        <Route path="/home/userdetails/:id?" element={<UserDetailPage />} />
         <Route  path='/home/Workout' element={<Workout />} />
         <Route  path='/home/DietPlan'  element={  <DietPlan /> }  />
         <Route path="/home/nutrition/add" element={<AddNutrition />} />

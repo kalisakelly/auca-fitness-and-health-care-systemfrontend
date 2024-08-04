@@ -15,22 +15,34 @@ const VideoChart = () => {
   });
 
   useEffect(() => {
-    axios.get('http://localhost:3000/videos')
-      .then((response) => {
-        const videos = response.data;
-        const labels = videos.map(video => video.name);
-        const uploads = videos.map(video => new Date(video.createdate).getTime());
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:3001/videos/count/videos');
+        const uploadsPerDay = response.data;
+
+        if (!Array.isArray(uploadsPerDay)) {
+          throw new Error('Response data is not an array');
+        }
+
+        const labels = uploadsPerDay.map(item => new Date(item.date).toLocaleDateString());
+        const counts = uploadsPerDay.map(item => item.count);
+
         setData({
           labels,
           datasets: [{
             label: 'Video Uploads',
-            data: uploads,
+            data: counts,
             backgroundColor: 'rgba(153, 102, 255, 0.6)',
             borderColor: 'rgba(153, 102, 255, 1)',
             fill: false,
           }],
         });
-      });
+      } catch (error) {
+        console.error('Error fetching video data:', error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   return (

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {jwtDecode} from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode'; // Corrected import for jwt-decode
 import { useNavigate } from 'react-router-dom';
 
 const SchedulePage = () => {
@@ -42,6 +42,12 @@ const SchedulePage = () => {
       navigate('/login');
       return;
     }
+
+    if (!details) {
+      alert('Details cannot be empty.');
+      return;
+    }
+
     const schedule = { date, hour: parseInt(hour), minute: parseInt(minute), details };
     try {
       if (editingId) {
@@ -68,7 +74,7 @@ const SchedulePage = () => {
     const token = localStorage.getItem('token');
     if (!token) {
       alert('You need to be logged in to edit schedules.');
-      navigate('/login');
+      navigate('/');
       return;
     }
     setDate(schedule.date);

@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import UserActions from '../components/UserActions';
+import { useNavigate } from 'react-router-dom';
 import VisitorInsights from '../components/VisitorInsights';
 import StudyTypeChart from '../components/StudyTypeChart';
 import VideoChart from '../components/VideoChart';
-import { useNavigate } from 'react-router-dom';
 
 const Adminpage = () => {
   const [videoCount, setVideoCount] = useState(0);
@@ -15,14 +14,23 @@ const Adminpage = () => {
   useEffect(() => {
     const fetchCounts = async () => {
       try {
-        const videoResponse = await axios.get('c');
+        const [videoResponse, nutritionResponse, blogResponse] = await Promise.all([
+          axios.get('http://localhost:3001/videos/count/videos'),
+          axios.get('http://localhost:3001/nutrition/count/nutrition'),
+          axios.get('http://localhost:3001/blog/count/blog')
+        ]);
+
+        console.log('Video Response:', videoResponse.data);
+        console.log('Nutrition Response:', nutritionResponse.data);
+        console.log('Blog Response:', blogResponse.data);
+
         setVideoCount(videoResponse.data.count);
-
-        const nutritionResponse = await axios.get('http://localhost:3001/nutrition/count');
         setNutritionCount(nutritionResponse.data.count);
-
-        const blogResponse = await axios.get('http://localhost:3001/blogs/count');
         setBlogCount(blogResponse.data.count);
+
+        console.log('Video Count:', videoCount);
+        console.log('Nutrition Count:', nutritionCount);
+        console.log('Blog Count:', blogCount);
       } catch (error) {
         console.error('Error fetching counts:', error);
       }
