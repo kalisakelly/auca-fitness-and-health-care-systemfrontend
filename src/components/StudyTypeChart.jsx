@@ -1,20 +1,63 @@
+import React, { useEffect, useState } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
+import axios from 'axios';
+import {jwtDecode} from 'jwt-decode'; // Import jwtDecode for debugging
 
 Chart.register(...registerables);
 
-const StudyTypeChart = () => {
-  const data = {
-    labels: ['Groups of 20 students', 'Groups of 10 students', 'Groups of 5 students', 'Individual sessions'],
+const BMICategoryChart = () => {
+  const [data, setData] = useState({
+    labels: ['Healthy', 'Obese', 'Underweight'],
     datasets: [
       {
-        label: 'Students by type of studying',
-        data: [20, 20, 15, 7],
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'],
-        hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'],
+        label: 'BMI Categories',
+        data: [],
+        backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56'],
+        hoverBackgroundColor: ['#36A2EB', '#FF6384', '#FFCE56'],
       },
     ],
-  };
+  });
+
+  useEffect(() => {
+    const fetchBMIStats = async () => {
+      try {
+        const token = localStorage.getItem('authToken');
+        console.log('Retrieved Token:', token); // Log the token to verify it's being retrieved
+
+        if (!token) {
+          throw new Error('No auth token found');
+        }
+
+        // Decode the token for debugging
+        const decodedToken = jwtDecode(token);
+        console.log('Decoded Token:', decodedToken);
+
+        const response = await axios.get('http://localhost:3001/userdetails/bmi/stats', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const { healthy, obese, underweight } = response.data;
+
+        setData({
+          labels: ['Healthy', 'Obese', 'Underweight'],
+          datasets: [
+            {
+              label: 'BMI Categories',
+              data: [healthy, obese, underweight],
+              backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56'],
+              hoverBackgroundColor: ['#36A2EB', '#FF6384', '#FFCE56'],
+            },
+          ],
+        });
+      } catch (error) {
+        console.error('Error fetching BMI stats:', error);
+      }
+    };
+
+    fetchBMIStats();
+  }, []);
 
   const options = {
     responsive: true,
@@ -23,12 +66,20 @@ const StudyTypeChart = () => {
 
   return (
     <div className="bg-white p-4 rounded-lg shadow h-96">
-      <h3 className="text-xl font-bold mb-4">Students by type of studying</h3>
+      <h3 className="text-xl font-bold mb-4">BMI Categories</h3>
       <Doughnut data={data} options={options} />
       <div className="mt-4">
         <ul>
           {data.labels.map((label, index) => (
-            <li key={index}>{label}: {data.datasets[0].data[index]} ( {Math.round((data.datasets[0].data[index] / data.datasets[0].data.reduce((a, b) => a + b, 0)) * 100)}%)</li>
+            <li key={index}>
+              {label}: {data.datasets[0].data[index]} (
+              {Math.round(
+                (data.datasets[0].data[index] /
+                  data.datasets[0].data.reduce((a, b) => a + b, 0)) *
+                  100
+              )}
+              %)
+            </li>
           ))}
         </ul>
       </div>
@@ -36,4 +87,4 @@ const StudyTypeChart = () => {
   );
 };
 
-export default StudyTypeChart;
+export default BMICategoryChart;

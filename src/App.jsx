@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import MainLayout from './layouts/MainLayout';
-import { SignUp, Login, Otp, Workout, Questions, DietPlan, MySchedule, Biometrics, PostPage, Adminpage, Exercise, BlogDetail } from './pages';
+import { SignUp, Login, Otp, Workout, Questions, DietPlan, MySchedule, Biometrics, PostPage, Adminpage, BlogDetail } from './pages';
 import ProtectedRoute from './components/ProtectedRoute';
 import VideoFormPage from './pages/AddVideo'; 
 import VideoListPage from './pages/VideoListPage';
@@ -56,7 +56,6 @@ const router = createBrowserRouter(
         <Route path='/home/Biometrics' element={<Biometrics />} />
         <Route path='/home/PostPage' element={<PostPage />} />
         <Route path='/home/Adminpage' element={  <Adminpage />} />
-        <Route path='/home/Exercise' element={  <Exercise />} />
         <Route path="/home/BlogDetail" element={<BlogDetail />} />
         <Route path="/home/UploadVideo" element={<VideoFormPage />} />
          <Route path="/home/Videos" element={<VideoListPage />} />

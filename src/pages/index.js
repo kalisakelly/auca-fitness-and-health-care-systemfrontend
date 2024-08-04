@@ -8,7 +8,6 @@ import Biometrics from './Biometrics';
 import Otp from './Verifyemail';
 import PostPage from './Post';
 import Adminpage from './AdminPage';
-import Exercise from './Exercise';
 import BlogDetail from './BlogDetail';
 
 export {
@@ -22,7 +21,6 @@ export {
     Otp,
     PostPage,
     Adminpage,
-    Exercise,
     BlogDetail,
     
 

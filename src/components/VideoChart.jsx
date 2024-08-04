@@ -18,7 +18,8 @@ const VideoChart = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get('http://localhost:3001/videos/count/videos');
-        const uploadsPerDay = response.data;
+        console.log('Response Data:', response.data);
+        const uploadsPerDay = response.data.uploads || []; // Adjust this based on actual response structure
 
         if (!Array.isArray(uploadsPerDay)) {
           throw new Error('Response data is not an array');

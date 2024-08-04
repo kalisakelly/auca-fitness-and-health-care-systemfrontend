@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {jwtDecode} from 'jwt-decode'; // Corrected import for jwt-decode
 import { useNavigate } from 'react-router-dom';
+import HeaderBlock from '../components/Headerblock';
+import workoutImage from '../assets/workout.jpg';
 
 const SchedulePage = () => {
   const [schedules, setSchedules] = useState([]);
@@ -113,7 +115,16 @@ const SchedulePage = () => {
 
   return (
     <div className="container mx-auto py-6">
-      <h2 className="text-3xl font-bold mb-6 text-center">My Schedule</h2>
+       <HeaderBlock
+                title="Fitness and Health Care System"
+                description={`Set his rule is land midst likeness they're replenish that have creepeth our is sea. Dominion
+                    fly dry darkness it likeness two greater fill, god. Hath signs god. Under green fruitful meat 
+                    night second saw god us. It bring third may moving, winged. Multiply that fifth forth creepeth open upon.
+                    Seasons without is upon own image creature living sea. One whales were. Let void of divided. Whales herb don't all.
+                    For brought yielding. Set tree together kind him after be subdue image creature midst night one stars fruitful moved.
+                    From you also itself creature midst fifth him, of image his.`}
+                image={workoutImage}
+            />
       <form onSubmit={handleSubmit} className="mb-8 bg-white p-6 rounded shadow-lg">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
           <input

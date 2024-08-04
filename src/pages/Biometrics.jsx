@@ -55,8 +55,7 @@ const Biometrics = () => {
             </div>
             <Button
               as="a"
-              href={`http://localhost:3001/download/pdf`}
-              download
+              href={`http://localhost:3001/userdetails/download/pdf`}
               className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md"
             >
               Download PDF
@@ -91,26 +90,26 @@ const Biometrics = () => {
             <div>
               <h2 className="text-xl font-bold mb-4">Medical History</h2>
               <div className="space-y-2">
-                {/* <div className="flex justify-between">
+                <div className="flex justify-between">
                   <span className="font-medium">Allergies:</span>
-                  <span>{userDetails.allergies.join(', ')}</span>
-                </div> */}
-                {/* <div className="flex justify-between">
+                  <span>{(userDetails.allergies || []).join(', ')}</span>
+                </div> 
+                <div className="flex justify-between">
                   <span className="font-medium">Chronic Conditions:</span>
-                  <span>{userDetails.chronicConditions.join(', ')}</span>
-                </div> */}
-                {/* <div className="flex justify-between">
+                  <span>{(userDetails.chronicConditions || []).join(', ')}</span>
+                </div>
+                <div className="flex justify-between">
                   <span className="font-medium">Medications:</span>
-                  <span>{userDetails.medications.join(', ')}</span>
+                  <span>{(userDetails.medications || []).join(', ')}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="font-medium">Surgeries:</span>
-                  <span>{userDetails.surgeries.join(', ')}</span>
+                  <span>{(userDetails.surgeries || []).join(', ')}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="font-medium">Family History:</span>
-                  <span>{userDetails.familyHistory.join(', ')}</span>
-                </div> */}
+                  <span>{(userDetails.familyHistory || []).join(', ')}</span>
+                </div>
               </div>
             </div>
             <div>

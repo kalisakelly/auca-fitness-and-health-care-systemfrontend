@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 
+
 const Otp = () => {
   const [otp, setOtp] = useState(["", "", "", ""]);
   const [error, setError] = useState("");

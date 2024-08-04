@@ -94,7 +94,7 @@ const BlogListPage = () => {
                 <span className="text-gray-600">{blog.likes || 0} likes</span>
               </div>
               <button
-                onClick={() => navigate(`/home/blog/${blog.id}`)}
+                onClick={() => navigate(`/blog/${blog.id}`)}
                 className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
               >
                 Read More
