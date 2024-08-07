@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
 import axios from 'axios';
-import {jwtDecode} from 'jwt-decode'; // Import jwtDecode for debugging
 
 Chart.register(...registerables);
 
@@ -22,22 +21,9 @@ const BMICategoryChart = () => {
   useEffect(() => {
     const fetchBMIStats = async () => {
       try {
-        const token = localStorage.getItem('authToken');
-        console.log('Retrieved Token:', token); // Log the token to verify it's being retrieved
+      
+        const response = await axios.get('http://localhost:3001/userdetails/bmi/stats');
 
-        if (!token) {
-          throw new Error('No auth token found');
-        }
-
-        // Decode the token for debugging
-        const decodedToken = jwtDecode(token);
-        console.log('Decoded Token:', decodedToken);
-
-        const response = await axios.get('http://localhost:3001/userdetails/bmi/stats', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
         const { healthy, obese, underweight } = response.data;
 
         setData({

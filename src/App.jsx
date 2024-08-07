@@ -13,7 +13,6 @@ import VideoListPage from './pages/VideoListPage';
 import NutritionPage from './pages/NutritionPage';
 import NotFoundPage from './pages/NotFoundPage';
 import BlogListPage from './pages/BlogListPage';
-import BlogDetailsPage from './pages/BlogDetailsPage';
 import AddEditBlogPage from './pages/AddEditBlogPage';
 import UserDetailsForm from './pages/UserDetailsForm';
 import NutritionDetails from './pages/NutritionDetails';
@@ -21,10 +20,6 @@ import AddNutrition from './pages/AddNutrition';
 import OverView from './pages/Overview';
 import RequestPasswordReset from './pages/Forgotpassword';
 import ResetPassword from './pages/ResetPassword';
-
-
-
-
 
 
 const router = createBrowserRouter(
@@ -41,7 +36,6 @@ const router = createBrowserRouter(
         <Route index element={<HomePage />} />
         <Route path='*' element={<NotFoundPage />} />
         <Route path="/home/blogs" element={<BlogListPage />} />
-        <Route path="/home/blog/:id" element={<BlogDetailsPage />} />
         <Route path="/home/add-blog" element={<AddEditBlogPage />} />
         <Route path="/home/edit-blog/:id" element={<AddEditBlogPage />} />
         <Route path='/home/UserDetailsForm' element={<UserDetailsForm />} />

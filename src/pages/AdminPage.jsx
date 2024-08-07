@@ -5,6 +5,7 @@ import Modal from 'react-modal';
 import { getAllUsers, createUser, updateUser, deleteUser } from '../apis/userApi';
 import VisitorInsights from '../components/VisitorInsights';
 import VideoChart from '../components/VideoChart';
+import BMICategoryChart from '../components/StudyTypeChart';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
 
@@ -59,16 +60,8 @@ const Adminpage = () => {
   useEffect(() => {
     const fetchBMIStats = async () => {
       try {
-        const token = localStorage.getItem('authToken');
-        if (!token) {
-          throw new Error('No auth token found');
-        }
 
-        const response = await axios.get('http://localhost:3001/userdetails/bmi/stats', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get('http://localhost:3001/userdetails/bmi/stats');
         const { healthy, obese, underweight } = response.data;
 
         setBmiData({
@@ -183,25 +176,7 @@ const Adminpage = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
         <VisitorInsights />
-        <div className="bg-white p-4 rounded-lg shadow h-96">
-          <h3 className="text-xl font-bold mb-4">BMI Categories</h3>
-          <Doughnut data={bmiData} options={bmiOptions} />
-          <div className="mt-4">
-            <ul>
-              {bmiData.labels.map((label, index) => (
-                <li key={index}>
-                  {label}: {bmiData.datasets[0].data[index]} (
-                  {Math.round(
-                    (bmiData.datasets[0].data[index] /
-                      bmiData.datasets[0].data.reduce((a, b) => a + b, 0)) *
-                      100
-                  )}
-                  %)
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+        <BMICategoryChart bmiData={bmiData} bmiOptions={bmiOptions} />
         <VideoChart />
       </div>
       <div className="mt-8">
@@ -252,46 +227,43 @@ const Adminpage = () => {
       <Modal isOpen={modalIsOpen} onRequestClose={closeModal} contentLabel="User Modal">
         <h2>{isEditing ? 'Edit User' : 'Add New User'}</h2>
         <form onSubmit={handleFormSubmit}>
-          <div>
-            <label>
-              Name:
-              <input
-                type="text"
-                name="username"
-                value={currentUser.username}
-                onChange={handleInputChange}
-                required
-              />
-            </label>
-          </div>
-          <div>
-            <label>
-              Email:
-              <input
-                type="email"
-                name="email"
-                value={currentUser.email}
-                onChange={handleInputChange}
-                required
-              />
-            </label>
-          </div>
-          <div>
-            <label>
-              Role:
-              <input
-                type="text"
-                name="role"
-                value={currentUser.role}
-                onChange={handleInputChange}
-                required
-              />
-            </label>
-          </div>
-          <button type="submit" className="bg-green-500 text-white p-2 rounded">
-            {isEditing ? 'Update User' : 'Add User'}
+          <label>
+            Name:
+            <input
+              type="text"
+              name="username"
+              value={currentUser.username}
+              onChange={handleInputChange}
+              required
+            />
+          </label>
+          <br />
+          <label>
+            Email:
+            <input
+              type="email"
+              name="email"
+              value={currentUser.email}
+              onChange={handleInputChange}
+              required
+            />
+          </label>
+          <br />
+          <label>
+            Role:
+            <input
+              type="text"
+              name="role"
+              value={currentUser.role}
+              onChange={handleInputChange}
+              required
+            />
+          </label>
+          <br />
+          <button type="submit" className="bg-green-500 text-white p-2 rounded mt-2">
+            {isEditing ? 'Update' : 'Add'}
           </button>
-          <button type="button" className="bg-gray-500 text-white p-2 rounded ml-2" onClick={closeModal}>
+          <button type="button" className="bg-gray-500 text-white p-2 rounded mt-2 ml-2" onClick={closeModal}>
             Cancel
           </button>
         </form>

@@ -42,11 +42,11 @@ const DietPlan = () => {
   };
 
   const handleViewDetails = (id) => {
-    navigate(`/nutrition/${id}`);
+    navigate(`/home/nutrition/${id}`);
   };
 
   const handleEdit = (id) => {
-    navigate(`/nutrition/edit/${id}`);
+    navigate(`/home/nutrition/edit/${id}`);
   };
 
   const handleRemove = async (id) => {
@@ -144,7 +144,7 @@ const DietPlan = () => {
             </div>
             {(userRole === 'admin' || userRole === 'nutritionist') && (
               <button
-                onClick={() => navigate('/nutrition/add')}
+                onClick={() => navigate('/home/nutrition/add')}
                 className="mt-4 px-4 py-2 bg-green-500 text-white rounded-md"
               >
                 Add New Nutrient

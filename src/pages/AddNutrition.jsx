@@ -10,8 +10,15 @@ const AddNutrition = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    const token = localStorage.getItem('token');
     e.preventDefault();
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('No token found. User might not be authenticated.');
+      navigate('/login'); // Redirect to login page if no token
+      return;
+    }
+
     const formData = new FormData();
     formData.append('name', name);
     formData.append('description', description);
@@ -27,7 +34,12 @@ const AddNutrition = () => {
       });
       navigate('/');
     } catch (error) {
-      console.error('Error adding nutrition:', error);
+      if (error.response && error.response.status === 401) {
+        console.error('Unauthorized. Token might be invalid or expired:', error);
+        navigate('/login'); // Redirect to login page if unauthorized
+      } else {
+        console.error('Error adding nutrition:', error);
+      }
     }
   };
 

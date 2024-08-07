@@ -13,38 +13,84 @@ const AddEditBlogPage = () => {
     if (id) {
       setIsEditMode(true);
       const fetchBlog = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          console.error('No token found. User might not be authenticated.');
+          navigate('/'); // Redirect to login page if no token
+          return;
+        }
+
         try {
-          const response = await axios.get(`http://localhost:3001/blog/${id}`);
+          const response = await axios.get(`http://localhost:3001/blog/${id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
           setTitle(response.data.title);
           setBody(response.data.body);
         } catch (error) {
           console.error('Error fetching blog:', error);
+          if (error.response && error.response.status === 401) {
+            navigate('/'); // Redirect to login page if unauthorized
+          }
         }
       };
       fetchBlog();
     }
-  }, [id]);
+  }, [id, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('No token found. User might not be authenticated.');
+      navigate('/'); // Redirect to login page if no token
+      return;
+    }
+
     try {
       if (isEditMode) {
-        await axios.patch(`http://localhost:3001/blog/${id}`, { title, body });
+        await axios.patch(`http://localhost:3001/blog/${id}`, { title, body }, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
       } else {
-        await axios.post(`http://localhost:3001/blog`, { title, body });
+        await axios.post('http://localhost:3001/blog', { title, body }, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
       }
-      navigate('/');
+      navigate('/home');
     } catch (error) {
       console.error('Error saving blog:', error);
+      if (error.response && error.response.status === 401) {
+        navigate('/login'); // Redirect to login page if unauthorized
+      }
     }
   };
 
   const handleDelete = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('No token found. User might not be authenticated.');
+      navigate('/login'); // Redirect to login page if no token
+      return;
+    }
+
     try {
-      await axios.delete(`http://localhost:3001/blog/${id}`);
+      await axios.delete(`http://localhost:3001/blog/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       navigate('/');
     } catch (error) {
       console.error('Error deleting blog:', error);
+      if (error.response && error.response.status === 401) {
+        navigate('/login'); // Redirect to login page if unauthorized
+      }
     }
   };
 
