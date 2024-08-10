@@ -4,16 +4,14 @@ import axios from 'axios';
 import Modal from 'react-modal';
 import { getAllUsers, createUser, updateUser, deleteUser } from '../apis/userApi';
 import VisitorInsights from '../components/VisitorInsights';
-import VideoChart from '../components/VideoChart';
 import BMICategoryChart from '../components/StudyTypeChart';
-import { Doughnut } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
 
 Chart.register(...registerables);
 
 Modal.setAppElement('#root'); // Adjust according to your app's root element
 
-const Adminpage = () => {
+const AdminPage = () => {
   const [videoCount, setVideoCount] = useState(0);
   const [nutritionCount, setNutritionCount] = useState(0);
   const [blogCount, setBlogCount] = useState(0);
@@ -60,7 +58,6 @@ const Adminpage = () => {
   useEffect(() => {
     const fetchBMIStats = async () => {
       try {
-
         const response = await axios.get('http://localhost:3001/userdetails/bmi/stats');
         const { healthy, obese, underweight } = response.data;
 
@@ -116,7 +113,7 @@ const Adminpage = () => {
     e.preventDefault();
     try {
       if (isEditing) {
-        await updateUser(userIdToEdit, currentUser);
+        await updateUser(userIdToEdit, currentUser); // Use userid to update the user
       } else {
         await createUser(currentUser);
       }
@@ -139,7 +136,7 @@ const Adminpage = () => {
   };
 
   const handleEditUser = (user) => {
-    setUserIdToEdit(user.id);
+    setUserIdToEdit(user.userid); // Set the userid of the selected user
     openModal(user, true);
   };
 
@@ -177,9 +174,8 @@ const Adminpage = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
         <VisitorInsights />
         <BMICategoryChart bmiData={bmiData} bmiOptions={bmiOptions} />
-        <VideoChart />
       </div>
-      <div className="mt-8">
+      <div className="mt-20">
         <h2 className="text-xl font-bold mb-4">Users</h2>
         <button
           className="bg-green-500 text-white p-2 rounded mb-4"
@@ -199,21 +195,21 @@ const Adminpage = () => {
           </thead>
           <tbody>
             {users.map((user) => (
-              <tr key={user.id || user.userid}>
+              <tr key={user.userid}>
                 <td className="py-2 px-4 border">{user.userid}</td>
                 <td className="py-2 px-4 border">{user.username}</td>
                 <td className="py-2 px-4 border">{user.email}</td>
                 <td className="py-2 px-4 border">{user.role}</td>
                 <td className="py-2 px-4 border">
                   <button
-                    className="bg-blue-500 text-white p-2 rounded mr-2"
+                    className="bg-blue-500 text-white p-1 rounded mr-2"
                     onClick={() => handleEditUser(user)}
                   >
                     Edit
                   </button>
                   <button
-                    className="bg-red-500 text-white p-2 rounded"
-                    onClick={() => handleDeleteUser(user.id || user.userid)}
+                    className="bg-red-500 text-white p-1 rounded"
+                    onClick={() => handleDeleteUser(user.userid)}
                   >
                     Delete
                   </button>
@@ -223,47 +219,33 @@ const Adminpage = () => {
           </tbody>
         </table>
       </div>
-
       <Modal isOpen={modalIsOpen} onRequestClose={closeModal} contentLabel="User Modal">
-        <h2>{isEditing ? 'Edit User' : 'Add New User'}</h2>
+        <h2>{isEditing ? 'Edit User' : 'Add User'}</h2>
         <form onSubmit={handleFormSubmit}>
           <label>
-            Name:
-            <input
-              type="text"
-              name="username"
-              value={currentUser.username}
-              onChange={handleInputChange}
-              required
-            />
+            Username:
+            <input type="text" name="username" value={currentUser.username} onChange={handleInputChange} required />
           </label>
           <br />
           <label>
             Email:
-            <input
-              type="email"
-              name="email"
-              value={currentUser.email}
-              onChange={handleInputChange}
-              required
-            />
+            <input type="email" name="email" value={currentUser.email} onChange={handleInputChange} required />
           </label>
           <br />
           <label>
             Role:
-            <input
-              type="text"
-              name="role"
-              value={currentUser.role}
-              onChange={handleInputChange}
-              required
-            />
+            <select name="role" value={currentUser.role} onChange={handleInputChange} required>
+              <option value="">Select Role</option>
+              <option value="admin">Admin</option>
+              <option value="user">User</option>
+              <option value="nutritionist">Nutritionist</option>
+            </select>
           </label>
           <br />
-          <button type="submit" className="bg-green-500 text-white p-2 rounded mt-2">
-            {isEditing ? 'Update' : 'Add'}
+          <button type="submit" className="bg-green-500 text-white p-2 rounded">
+            {isEditing ? 'Update User' : 'Add User'}
           </button>
-          <button type="button" className="bg-gray-500 text-white p-2 rounded mt-2 ml-2" onClick={closeModal}>
+          <button onClick={closeModal} className="bg-gray-500 text-white p-2 rounded ml-2">
             Cancel
           </button>
         </form>
@@ -272,4 +254,4 @@ const Adminpage = () => {
   );
 };
 
-export default Adminpage;
+export default AdminPage;

@@ -30,6 +30,27 @@ const Biometrics = () => {
     fetchUserDetails();
   }, []);
 
+  const handleDownloadPdf = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:3001/userdetails/download/pdf', {
+        responseType: 'blob',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'userdetails.pdf');
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error('Error downloading the PDF report:', error);
+    }
+  };
+
   if (userDetails === null) {
     return (
       <div className="flex flex-col items-center justify-center h-screen">
@@ -54,8 +75,7 @@ const Biometrics = () => {
               <p className="text-gray-500 dark:text-gray-400">Download your personalized health report</p>
             </div>
             <Button
-              as="a"
-              href={`http://localhost:3001/userdetails/download/pdf`}
+              onClick={handleDownloadPdf}
               className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md"
             >
               Download PDF
@@ -83,7 +103,7 @@ const Biometrics = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="font-medium">Weight:</span>
-                  <span>{userDetails.weight} kg</span>
+                  <span>{userDetails.mass} kg</span>
                 </div>
               </div>
             </div>
@@ -93,7 +113,7 @@ const Biometrics = () => {
                 <div className="flex justify-between">
                   <span className="font-medium">Allergies:</span>
                   <span>{(userDetails.allergies || []).join(', ')}</span>
-                </div> 
+                </div>
                 <div className="flex justify-between">
                   <span className="font-medium">Chronic Conditions:</span>
                   <span>{(userDetails.chronicConditions || []).join(', ')}</span>

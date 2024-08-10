@@ -55,7 +55,7 @@ const Sidebar = () => {
   const handleLogout =() => {
     localStorage.removeItem('userToken');
     localStorage.removeItem('userRole');
-    navigate('/Login');
+    navigate('/');
   };
 
   const getLinks = () => {

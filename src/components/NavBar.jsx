@@ -110,7 +110,7 @@ const NavBar = () => {
       <div className="p-4 h-[60px] border-b flex">
         <div className="flex flex-grow items-center justify-between">
           <Typography variant="h5" color="blue-gray" className="flex-shrink-0">
-            Navbar
+          <img src="/auca.jpg" alt="AUCA Logo" className="rounded-full w-20 h-20 mb-8" />
           </Typography>
           <div className="ml-auto flex items-center gap-1 md:mr-4"></div>
           <div className="flex items-center justify-between px-4">

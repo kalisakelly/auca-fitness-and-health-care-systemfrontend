@@ -7,7 +7,7 @@ import HeaderBlock from '../components/Headerblock';
 import workoutImage from '../assets/workout.jpg';
 import StatisticCard from '../components/StatisticCard';
 import { Button } from 'flowbite-react';
-import {jwtDecode} from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode'; 
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 
@@ -69,7 +69,7 @@ const Overview = () => {
                             }
                         }).catch(error => {
                             if (error.response && error.response.status === 404) {
-                                return { data: {} }; // Handle 404 error by returning empty data
+                                return { data: {} };
                             }
                             throw error;
                         })
@@ -110,12 +110,13 @@ const Overview = () => {
         );
     };
 
+    // Dummy data for chart
     const chartData = {
-        labels: data.statistics.map(stat => stat.title),
+        labels: ['Workouts Completed', 'Calories Burned', 'Active Days', 'Steps Taken'],
         datasets: [
             {
-                label: 'Value',
-                data: data.statistics.map(stat => stat.value),
+                label: 'User Statistics',
+                data: [45, 1200, 15, 30000], // Example values
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1,
@@ -146,7 +147,6 @@ const Overview = () => {
 
     return (
         <div className="container mx-auto p-4">
-            {/* Header Section */}
             <HeaderBlock
                 title="Fitness and Health Care System"
                 description={`Set his rule is land midst likeness they're replenish that have creepeth our is sea. Dominion
@@ -158,18 +158,14 @@ const Overview = () => {
                 image={workoutImage}
             />
 
-            {/* Main Grid Section */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Left Column */}
                 <div className="lg:col-span-2">
-                    {/* Statistics Cards */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                         {data.statistics.map((stat, index) => (
                             <StatisticCard key={index} title={stat.title} value={stat.value} />
                         ))}
                     </div>
 
-                    {/* Goal Progress */}
                     <div className="bg-white rounded-lg shadow p-6 mb-6">
                         <h2 className="text-xl font-bold mb-4">{data.goalProgress.title}</h2>
                         <div className="flex justify-between items-center mb-4">
@@ -187,7 +183,6 @@ const Overview = () => {
                         </div>
                     </div>
 
-                    {/* Posts */}
                     {data.posts.map((post, index) => (
                         <div key={index} className="bg-white rounded-lg shadow p-6 mb-6">
                             <div className="flex items-center mb-4">
@@ -198,7 +193,7 @@ const Overview = () => {
                                 </div>
                             </div>
                             <h2 className="text-2xl font-bold mb-4">{post.title}</h2>
-                            <p className="mb-4">{post.body.slice(0, 100)}...</p>
+                            <div className="mb-4" dangerouslySetInnerHTML={{ __html: post.body.slice(0, 100) + '...' }} />
                             <div className="flex justify-between items-center">
                                 <div className="mt-2 text-gray-500 flex space-x-4">
                                     <div className='flex items-center space-x-1'>
@@ -221,33 +216,25 @@ const Overview = () => {
                     ))}
                 </div>
 
-                {/* Right Column */}
                 <div className="lg:col-span-1">
-                    {/* My Schedule */}
                     {isAuthenticated && (
                         <div className="bg-white rounded-lg shadow p-6 mb-6">
                             <div className="flex justify-between items-center mb-4">
                                 <h2 className="text-xl font-bold">Weekly Schedule</h2>
-                                <a href="/home/MySchedule" className="text-orange-500 hover:text-orange-700">
-                                    <Button>Add New</Button>
-                                </a>
+                                <a href="/home/MySchedule" className="text-blue-500">View Schedule</a>
                             </div>
-                            {hasSchedule ? (
+                            <p>Your schedule</p>
+                            {hasSchedule && (
                                 <ul>
-                                    {data.mySchedules.map((event, index) => (
-                                        <li key={index} className="flex justify-between items-center mb-4">
-                                            <div>
-                                                <h3 className="font-bold">{event.date}</h3>
-                                                <p>{event.details}</p> {/* Assuming you have 'details' property in event */}
-                                            </div>
-                                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                                Start
-                                            </button>
-                                        </li>
+                                    {data.mySchedules.map((schedule, index) => (
+                                        <li key={index}>{schedule.date}: {schedule.details}</li>
                                     ))}
                                 </ul>
-                            ) : (
-                                <p>No events found.</p>
+                            )}
+                            {!hasSchedule && (
+                                <div className="text-center py-6">
+                                    <p className="text-gray-500">No schedule for this week.</p>
+                                </div>
                             )}
                         </div>
                     )}

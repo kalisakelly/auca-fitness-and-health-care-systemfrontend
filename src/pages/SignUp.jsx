@@ -43,7 +43,7 @@ const SignUp = () => {
         setShowSuccessModal(true);
         const timeoutId = setTimeout(() => {
           setShowSuccessModal(false);
-          navigate("/otp-verification");
+          navigate("/otp");
           setHideModalTimeout(null); // Clear timeout ID
         }, 2000);
         setHideModalTimeout(timeoutId);

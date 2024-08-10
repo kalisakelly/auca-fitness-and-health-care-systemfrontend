@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -52,6 +52,11 @@ const BlogListPage = () => {
     );
   };
 
+  const stripHtmlTags = (html) => {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || '';
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -70,7 +75,7 @@ const BlogListPage = () => {
       <div className="mb-6">
         <input
           type="text"
-          placeholder="Search blogs..."
+          placeholder="Search blogs by title..."
           value={searchTerm}
           onChange={handleSearch}
           className="w-full p-2 border rounded"
@@ -87,7 +92,7 @@ const BlogListPage = () => {
               </div>
             </div>
             <h2 className="text-2xl font-bold mb-4">{blog.title}</h2>
-            <p className="mb-4">{blog.body.slice(0, 100)}...</p>
+            <p className="mb-4">{stripHtmlTags(blog.body).slice(0, 100)}...</p>
             <div className="flex justify-between items-center mb-4">
               <div className="flex space-x-4">
                 <span className="text-gray-600">{blog.views || 0} views</span>

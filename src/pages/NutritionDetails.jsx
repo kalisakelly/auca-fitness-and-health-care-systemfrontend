@@ -35,7 +35,12 @@ const NutritionDetails = () => {
             className="w-full h-64 object-cover rounded-lg mb-6"
           />
         )}
-        <p className="text-lg mb-4"><strong>Description:</strong> {nutrition.description}</p>
+        <div className="text-lg mb-4">
+          <strong>Description:</strong>
+          <div
+            dangerouslySetInnerHTML={{ __html: nutrition.description }}
+          />
+        </div>
         <p className="text-lg mb-6"><strong>Category:</strong> {nutrition.category}</p>
         <button
           onClick={() => navigate(-1)}

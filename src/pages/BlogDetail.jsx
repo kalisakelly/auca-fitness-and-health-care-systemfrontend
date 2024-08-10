@@ -119,7 +119,8 @@ const BlogDetail = () => {
           </div>
         </div>
         <h3 className="text-xl font-bold mb-2">{blog.title}</h3>
-        <p className="mb-4">{blog.body}</p>
+        {/* Render the blog body as HTML */}
+        <div className="mb-4" dangerouslySetInnerHTML={{ __html: blog.body }} />
         <div className="flex justify-between items-center mb-4">
           <div className="flex">
             {blog.tags && blog.tags.map((tag) => (

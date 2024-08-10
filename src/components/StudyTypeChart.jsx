@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
-import axios from 'axios';
-
 Chart.register(...registerables);
 
 const BMICategoryChart = () => {
@@ -21,9 +20,7 @@ const BMICategoryChart = () => {
   useEffect(() => {
     const fetchBMIStats = async () => {
       try {
-      
         const response = await axios.get('http://localhost:3001/userdetails/bmi/stats');
-
         const { healthy, obese, underweight } = response.data;
 
         setData({
@@ -45,13 +42,30 @@ const BMICategoryChart = () => {
     fetchBMIStats();
   }, []);
 
+  const handleDownloadReport = async () => {
+    try {
+      const response = await axios.get('http://localhost:3001/userdetails/user-details/excel', {
+        responseType: 'blob',
+      });
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'userdetails.xlsx');
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error('Error downloading the report:', error);
+    }
+  };
+
   const options = {
     responsive: true,
     maintainAspectRatio: false,
   };
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow h-96">
+    <div className="bg-white p-12 rounded-lg shadow h-96">
       <h3 className="text-xl font-bold mb-4">BMI Categories</h3>
       <Doughnut data={data} options={options} />
       <div className="mt-4">
@@ -68,6 +82,12 @@ const BMICategoryChart = () => {
             </li>
           ))}
         </ul>
+        <button
+          onClick={handleDownloadReport}
+          className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded mt-2"
+        >
+          Get Report
+        </button>
       </div>
     </div>
   );

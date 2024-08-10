@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const AddEditBlogPage = () => {
   const [title, setTitle] = useState('');
@@ -49,14 +51,15 @@ const AddEditBlogPage = () => {
     }
 
     try {
+      const blogData = { title, body }; // Body is now HTML content
       if (isEditMode) {
-        await axios.patch(`http://localhost:3001/blog/${id}`, { title, body }, {
+        await axios.patch(`http://localhost:3001/blog/${id}`, blogData, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
       } else {
-        await axios.post('http://localhost:3001/blog', { title, body }, {
+        await axios.post('http://localhost:3001/blog', blogData, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -110,11 +113,11 @@ const AddEditBlogPage = () => {
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">Body</label>
-          <textarea
+          <ReactQuill
             value={body}
-            onChange={(e) => setBody(e.target.value)}
+            onChange={setBody}
             className="w-full p-2 border rounded"
-            rows="10"
+            theme="snow"
             required
           />
         </div>

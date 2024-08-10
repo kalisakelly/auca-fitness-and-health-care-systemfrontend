@@ -28,7 +28,7 @@ const router = createBrowserRouter(
       
       <Route path='/SignUp' element={<SignUp />} />
       <Route path='/' element={<Login />} />
-      <Route path='/OTP' element={<Otp />} />
+      <Route path='/otp' element={<Otp />} />
       <Route path= "/Forgot-password" element={<RequestPasswordReset/>} />
       <Route path='/Reset-password' element={<ResetPassword/>}/>
       <Route path="/blog/:id" element={<BlogDetail />} />

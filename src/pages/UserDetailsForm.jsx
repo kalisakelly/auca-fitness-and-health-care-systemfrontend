@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {jwtDecode} from 'jwt-decode';  // Import jwt-decode
+import {jwtDecode} from 'jwt-decode';  // Correct import for jwt-decode
 import { useNavigate } from 'react-router-dom';
 
 const UserDetailsForm = ({ isEdit }) => {
@@ -12,8 +12,6 @@ const UserDetailsForm = ({ isEdit }) => {
     mass: '',
     age: '',
     gender: '',
-    yearofbirth: '',
-    physicalActivityLevel: 'Sedentary',
     dietaryPreferences: '',
     medicalHistory: '',
     fitnessGoals: '',
@@ -47,11 +45,8 @@ const UserDetailsForm = ({ isEdit }) => {
           navigate('/home/Overview');
           return;
         }
-        console.log('Token found:', token);
-
+        
         const decodedToken = jwtDecode(token);
-        console.log('Decoded token:', decodedToken);
-
         const userId = decodedToken.id;
         const config = {
           headers: {
@@ -59,18 +54,15 @@ const UserDetailsForm = ({ isEdit }) => {
           },
         };
 
-        console.log(`Fetching data for user ID: ${userId}`);
-        const response = await axios.get(`http://localhost:3001/userdetails/user/test`, config);
+        const response = await axios.get(`http://localhost:3001/userdetails/user/${userId}`, config);
         const data = response.data;
-        const { id, BMI, healthstatus, ...userData } = data;
-        console.log('Fetched user data:', userData);
+        console.log('Fetched user data:', data);
+
+        const { id, ...userData } = data;
         setFormState(userData);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching user data:', error);
-        if (error.response) {
-          console.error('Error response data:', error.response.data);
-        }
         setLoading(false);
       }
     };
@@ -81,6 +73,10 @@ const UserDetailsForm = ({ isEdit }) => {
       setLoading(false);
     }
   }, [isEdit, navigate]);
+
+  useEffect(() => {
+    console.log('Form state updated:', formState);
+  }, [formState]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -95,36 +91,34 @@ const UserDetailsForm = ({ isEdit }) => {
         height: formState.height ? parseFloat(formState.height) : null,
         mass: formState.mass ? parseFloat(formState.mass) : null,
         age: formState.age ? parseInt(formState.age, 10) : null,
-        yearofbirth: formState.yearofbirth ? parseInt(formState.yearofbirth, 10) : null,
         waistCircumference: formState.waistCircumference ? parseFloat(formState.waistCircumference) : null,
         hipCircumference: formState.hipCircumference ? parseFloat(formState.hipCircumference) : null,
         bodyFatPercentage: formState.bodyFatPercentage ? parseFloat(formState.bodyFatPercentage) : null,
       };
-
+    
+      console.log('Submitting data:', data); // Add this line to see the data being sent
+    
       const config = {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json',
         },
       };
-
+    
       let response;
       if (isEdit) {
         response = await axios.patch(`http://localhost:3001/userdetails/${formState.id}`, data, config);
       } else {
         response = await axios.post('http://localhost:3001/userdetails/create', data, config);
       }
-
-      console.log('User details saved:', response.data);
-      navigate('/');
+    
+      navigate('/home');
     } catch (error) {
-      console.error('Error saving user details:', error);
-      if (error.response && error.response.data) {
-        console.error('Backend response:', error.response.data);
-      }
+      console.error('Error saving user details:', error.response?.data || error.message); // Adjust this line to log detailed error info
     }
   };
-
+  
+  
   const handleDelete = async () => {
     try {
       const config = {
@@ -137,9 +131,6 @@ const UserDetailsForm = ({ isEdit }) => {
       navigate('/');
     } catch (error) {
       console.error('Error deleting user details:', error);
-      if (error.response && error.response.data) {
-        console.error('Backend response:', error.response.data);
-      }
     }
   };
 
@@ -162,14 +153,10 @@ const UserDetailsForm = ({ isEdit }) => {
 
       const response = await axios.get(`http://localhost:3001/userdetails/user/${userId}`, config);
       const data = response.data;
-      const { id, BMI, healthstatus, ...userData } = data;
-      console.log('Fetched user data:', userData);
-      setFormState(userData);
+      console.log('Fetched user data:', data);
+      setFormState(data);
     } catch (error) {
       console.error('Error fetching user data:', error);
-      if (error.response && error.response.data) {
-        console.error('Backend response:', error.response.data);
-      }
     }
   };
 
@@ -187,18 +174,16 @@ const UserDetailsForm = ({ isEdit }) => {
               <label className="block text-gray-700 font-bold mb-2">
                 {key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')}:
               </label>
-              {key === 'physicalActivityLevel' ? (
+              {key === 'gender' ? (
                 <select
                   name={key}
                   value={formState[key]}
                   onChange={handleChange}
                   className="border p-2 rounded w-full"
                 >
-                  <option value="Sedentary">Sedentary</option>
-                  <option value="Moderate exercise or sports 2-3 days/week">
-                    Moderate exercise or sports 2-3 days/week
-                  </option>
-                  <option value="Vigorously active lifestyle">Vigorously active lifestyle</option>
+                  <option value="">Select Gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
                 </select>
               ) : key.includes('History') || key.includes('Goals') || key.includes('Results') ||
                 key.includes('Data') || key.includes('Intake') || key.includes('Info') ||
@@ -212,7 +197,7 @@ const UserDetailsForm = ({ isEdit }) => {
                 />
               ) : (
                 <input
-                  type={['height', 'mass', 'age', 'yearofbirth', 'waistCircumference', 'hipCircumference', 'bodyFatPercentage'].includes(key) ? 'number' : 'text'}
+                  type={['height', 'mass', 'age', 'waistCircumference', 'hipCircumference', 'bodyFatPercentage'].includes(key) ? 'number' : 'text'}
                   name={key}
                   value={formState[key]}
                   onChange={handleChange}

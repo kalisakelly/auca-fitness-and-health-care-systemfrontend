@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import DOMPurify from 'dompurify'; // Import DOMPurify for sanitizing HTML
 import HeaderBlock from '../components/Headerblock';
 import workoutImage from '../assets/workout.jpg';
 
@@ -64,18 +65,23 @@ const DietPlan = () => {
 
   const totalPages = Math.ceil(totalItems / limit);
 
+  const truncateDescription = (description, wordLimit) => {
+    const words = description.split(' ');
+    return words.length > wordLimit ? words.slice(0, wordLimit).join(' ') + '...' : description;
+  };
+
   return (
     <div className="flex flex-col bg-gray-100 min-h-screen">
-       <HeaderBlock
-                title="Fitness and Health Care System"
-                description={`Set his rule is land midst likeness they're replenish that have creepeth our is sea. Dominion
+      <HeaderBlock
+        title="Fitness and Health Care System"
+        description={`Set his rule is land midst likeness they're replenish that have creepeth our is sea. Dominion
                     fly dry darkness it likeness two greater fill, god. Hath signs god. Under green fruitful meat 
                     night second saw god us. It bring third may moving, winged. Multiply that fifth forth creepeth open upon.
                     Seasons without is upon own image creature living sea. One whales were. Let void of divided. Whales herb don't all.
                     For brought yielding. Set tree together kind him after be subdue image creature midst night one stars fruitful moved.
                     From you also itself creature midst fifth him, of image his.`}
-                image={workoutImage}
-            />
+        image={workoutImage}
+      />
       <div className="flex-1 p-6">
         <div className="flex flex-col md:flex-row mb-6">
           <div className="md:w-2/3">
@@ -103,7 +109,13 @@ const DietPlan = () => {
                     <h2 className="text-lg font-bold mb-2 cursor-pointer" onClick={() => handleViewDetails(nutrition.id)}>
                       {nutrition.name}
                     </h2>
-                    <p className="text-gray-700 mb-2">{nutrition.description}</p>
+                    <p
+                      className="text-gray-700 mb-2 cursor-pointer"
+                      onClick={() => handleViewDetails(nutrition.id)}
+                      dangerouslySetInnerHTML={{
+                        __html: DOMPurify.sanitize(truncateDescription(nutrition.description, 30)),
+                      }}
+                    />
                     <p className="text-gray-500 mb-4">{nutrition.category}</p>
                     {(userRole === 'admin' || userRole === 'nutritionist') && (
                       <div className="flex justify-between">
